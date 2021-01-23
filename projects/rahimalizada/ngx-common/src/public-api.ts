@@ -39,3 +39,5 @@ export * from './lib/rest/abstract-get-one-by-path.resolver';
 export * from './lib/rest/abstract-get-one.resolver';
 export * from './lib/rest/abstract-rest.service';
 export * from './lib/rest/date-parser.interceptor';
+export * from './lib/services/external-script-loader.service';
+

@@ -1,7 +1,7 @@
 {
   "name": "@rahimalizada/ngx-common",
   "version": "0.0.5",
-  "description": "Common library. Includes base model files. includes a base abstract service for REST services and related angular resolvers/interceptors. Includes generic JWT authentication services.",
+  "description": "Common library. Includes base model files. includes a base abstract service for REST services and related angular resolvers/interceptors. Includes generic JWT authentication services. Includes external script loader for angular projects.",
   "keywords": [
     "common",
     "lib",
@@ -12,7 +12,11 @@
     "resolver",
     "interceptor",
     "jwt",
-    "authentication"
+    "authentication",
+    "external",
+    "script",
+    "loader",
+    "javascript"
   ],
   "author": {
     "name": "Rahim Alizada"
