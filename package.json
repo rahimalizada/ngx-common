@@ -1,7 +1,7 @@
 {
   "name": "ngx-common",
   "version": "0.0.6",
-  "description": "Common library. Includes base model files. includes a base abstract service for REST services and related angular resolvers/interceptors. Includes generic JWT authentication services. Includes external script loader for angular projects.",
+  "description": "Common library. Includes base model files. includes a base abstract service for REST services and related angular resolvers/interceptors. Includes generic JWT authentication services. Includes external script loader for angular projects. Includes a collection of Angular pipes",
   "keywords": [
     "common",
     "lib",
@@ -16,7 +16,8 @@
     "external",
     "script",
     "loader",
-    "javascript"
+    "javascript",
+    "pipe"
   ],
   "author": {
     "name": "Rahim Alizada"
