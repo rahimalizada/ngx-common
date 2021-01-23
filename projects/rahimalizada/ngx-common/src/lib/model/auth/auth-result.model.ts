@@ -1,6 +1,6 @@
-import { WithID } from '../with-id.model';
+import { WithCredentials } from './../credentials/with-credentials.model';
 
-export interface AuthResult<T extends WithID<S>, S> {
+export interface AuthResult<T extends WithCredentials<S>, S> {
   subject: T;
   token: string;
   refreshToken: string;
