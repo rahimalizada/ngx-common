@@ -29,4 +29,12 @@ export * from './lib/model/with-email.model';
 export * from './lib/model/with-id.model';
 export * from './lib/model/with-updated.model';
 export * from './lib/ngx-common.module';
+export * from './lib/rest/abstract-get-many-by-path.resolver';
+export * from './lib/rest/abstract-get-many.resolver';
+export * from './lib/rest/abstract-get-one-by-path.resolver';
+export * from './lib/rest/abstract-get-one.resolver';
+export * from './lib/rest/abstract-rest.service';
+export * from './lib/rest/date-parser.interceptor';
+
+
 

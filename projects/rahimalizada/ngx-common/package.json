@@ -1,10 +1,16 @@
 {
   "name": "@rahimalizada/ngx-common",
-  "version": "0.0.2",
-  "description": "Common library",
+  "version": "0.0.3",
+  "description": "Common library. Includes base model files. includes a base abstract service for REST services and related angular resolvers/interceptors.",
   "keywords": [
     "common",
-    "lib"
+    "lib",
+    "angular",
+    "rest",
+    "http",
+    "service",
+    "resolver",
+    "interceptor"
   ],
   "author": {
     "name": "Rahim Alizada"
@@ -20,7 +26,8 @@
   },
   "peerDependencies": {
     "@angular/common": "^11.1.0",
-    "@angular/core": "^11.1.0"
+    "@angular/core": "^11.1.0",
+    "@angular/router": "^11.1.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"
