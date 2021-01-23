@@ -1,6 +1,23 @@
 {
   "name": "ngx-common",
   "version": "0.0.0",
+  "description": "Common library",
+  "keywords": [
+    "common",
+    "lib"
+  ],
+  "author": {
+    "name": "Rahim Alizada"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/rahimalizada/ngx-common",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rahimalizada/ngx-common.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rahimalizada/ngx-common/issues"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
