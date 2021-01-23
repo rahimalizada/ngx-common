@@ -1,7 +1,7 @@
 {
   "name": "@rahimalizada/ngx-common",
   "version": "0.0.4",
-  "description": "Common library. Includes base model files. includes a base abstract service for REST services and related angular resolvers/interceptors.",
+  "description": "Common library. Includes base model files. includes a base abstract service for REST services and related angular resolvers/interceptors. Includes generic JWT authentication services.",
   "keywords": [
     "common",
     "lib",
@@ -10,7 +10,9 @@
     "http",
     "service",
     "resolver",
-    "interceptor"
+    "interceptor",
+    "jwt",
+    "authentication"
   ],
   "author": {
     "name": "Rahim Alizada"
@@ -27,7 +29,9 @@
   "peerDependencies": {
     "@angular/common": "^11.1.0",
     "@angular/core": "^11.1.0",
-    "@angular/router": "^11.1.0"
+    "@angular/router": "^11.1.0",
+    "@auth0/angular-jwt": "^5.0.2",
+    "shiro-trie": "^0.4.10"
   },
   "dependencies": {
     "tslib": "^2.0.0"

@@ -2,6 +2,10 @@
  * Public API Surface of ngx-common
  */
 
+export * from './lib/auth/abstract-auth.guard';
+export * from './lib/auth/abstract-auth.service';
+export * from './lib/auth/abstract-jwt.interceptor';
+export * from './lib/auth/with-permissions-check.model';
 export * from './lib/model/account/account-activation-request.model';
 export * from './lib/model/account/activation-code-request.model';
 export * from './lib/model/auth/auth-result.model';
@@ -35,6 +39,3 @@ export * from './lib/rest/abstract-get-one-by-path.resolver';
 export * from './lib/rest/abstract-get-one.resolver';
 export * from './lib/rest/abstract-rest.service';
 export * from './lib/rest/date-parser.interceptor';
-
-
-
