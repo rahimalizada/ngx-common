@@ -44,4 +44,8 @@ export * from './lib/rest/abstract-get-one.resolver';
 export * from './lib/rest/abstract-rest.service';
 export * from './lib/rest/date-parser.interceptor';
 export * from './lib/services/external-script-loader.service';
+export * from './lib/validators/fields-match-validator';
+export * from './lib/validators/password-validator';
+export * from './lib/validators/pattern-validator';
+export * from './lib/validators/url-validator';
 
