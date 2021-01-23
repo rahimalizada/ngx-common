@@ -2,6 +2,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "@rahimalizada/ngx-common": [
+        "dist/rahimalizada/ngx-common/rahimalizada-ngx-common",
+        "dist/rahimalizada/ngx-common"
+      ]
+    },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,

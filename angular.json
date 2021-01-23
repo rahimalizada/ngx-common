@@ -3,5 +3,46 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-  }
+    "@rahimalizada/ngx-common": {
+      "projectType": "library",
+      "root": "projects/rahimalizada/ngx-common",
+      "sourceRoot": "projects/rahimalizada/ngx-common/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/rahimalizada/ngx-common/tsconfig.lib.json",
+            "project": "projects/rahimalizada/ngx-common/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/rahimalizada/ngx-common/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/rahimalizada/ngx-common/src/test.ts",
+            "tsConfig": "projects/rahimalizada/ngx-common/tsconfig.spec.json",
+            "karmaConfig": "projects/rahimalizada/ngx-common/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/rahimalizada/ngx-common/**/*.ts",
+              "projects/rahimalizada/ngx-common/**/*.html"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  },
+  "defaultProject": "@rahimalizada/ngx-common"
 }
