@@ -12,6 +12,7 @@ export * from './lib/model/auth/renew-token-request.model';
 export * from './lib/model/auth/reset-password-confirmation.model';
 export * from './lib/model/auth/reset-password-request.model';
 export * from './lib/model/auth/simple-password-change-request.model';
+export * from './lib/model/batch-update-request.model';
 export * from './lib/model/contact-request/contact-request.model';
 export * from './lib/model/mongodb/object-id.model';
 export * from './lib/model/with-id.model';
