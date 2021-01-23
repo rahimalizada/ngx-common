@@ -1,4 +1,4 @@
-import { WithID } from '@rahimalizada/ngx-jwt-auth';
+import { WithID } from './../with-id.model';
 
 export interface OpLog extends WithID<string> {
   id: string;
