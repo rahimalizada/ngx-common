@@ -4,7 +4,7 @@
 
 export * from './lib/model/account/account-activation-request.model';
 export * from './lib/model/account/activation-code-request.model';
-export * from './lib/model/auth/auth-data.model';
+export * from './lib/model/auth/auth-result.model';
 export * from './lib/model/auth/login-request.model';
 export * from './lib/model/auth/password-change-request.model';
 export * from './lib/model/auth/register-request.model';
