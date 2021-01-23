@@ -2,6 +2,8 @@
  * Public API Surface of ngx-common
  */
 
+export * from './lib/model/account/account-activation-request.model';
+export * from './lib/model/account/activation-code-request.model';
 export * from './lib/model/auth/auth-data.model';
 export * from './lib/model/auth/login-request.model';
 export * from './lib/model/auth/password-change-request.model';
@@ -13,4 +15,5 @@ export * from './lib/model/auth/simple-password-change-request.model';
 export * from './lib/model/contact-request/contact-request.model';
 export * from './lib/model/mongodb/object-id.model';
 export * from './lib/model/with-id.model';
+export * from './lib/model/with-updated.model';
 export * from './lib/ngx-common.module';
