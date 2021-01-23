@@ -1,6 +1,6 @@
 {
   "name": "ngx-common",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Common library. Includes base model files. includes a base abstract service for REST services and related angular resolvers/interceptors. Includes generic JWT authentication services.",
   "keywords": [
     "common",
