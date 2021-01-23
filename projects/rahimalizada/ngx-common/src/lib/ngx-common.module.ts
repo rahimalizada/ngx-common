@@ -4,9 +4,9 @@ import { NgxCommonComponent } from './ngx-common.component';
 
 
 @NgModule({
-  declarations: [NgxCommonComponent],
+  declarations: [],
   imports: [
   ],
-  exports: [NgxCommonComponent]
+  exports: []
 })
 export class NgxCommonModule { }
