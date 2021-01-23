@@ -21,6 +21,7 @@ export * from './lib/model/credentials/with-credentials.model';
 export * from './lib/model/credentials/with-security-roles.model';
 export * from './lib/model/mongodb/object-id.model';
 export * from './lib/model/oplog/oplog.model';
+export * from './lib/model/status-update/status-update.model';
 export * from './lib/model/with-email.model';
 export * from './lib/model/with-id.model';
 export * from './lib/model/with-updated.model';
