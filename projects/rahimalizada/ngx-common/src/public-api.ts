@@ -7,6 +7,8 @@ export * from './lib/auth/abstract-auth.service';
 export * from './lib/auth/abstract-jwt.interceptor';
 export * from './lib/auth/with-permissions-check.model';
 export * from './lib/component/abstract-form-component';
+export * from './lib/directives/progress-indicator.directive';
+export * from './lib/interceptors/progress-indicator.interceptor';
 export * from './lib/interceptors/pwa-launch-mode.interceptor';
 export * from './lib/model/account/account-activation-request.model';
 export * from './lib/model/account/activation-code-request.model';

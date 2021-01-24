@@ -5,12 +5,14 @@ import { PwaLaunchModeInterceptor } from './interceptors/pwa-launch-mode.interce
 import { SafePipe } from './pipes/safe.pipe';
 import { ValueOrDashPipe } from './pipes/value-or-dash.pipe';
 import { YesNoPipe } from './pipes/yes-no.pipe';
+import { ProgressIndicatorDirective } from './directives/progress-indicator.directive';
+import { ProgressIndicatorInterceptor } from './interceptors/progress-indicator.interceptor';
 import { DateParserInterceptor } from './rest/date-parser.interceptor';
 
 @NgModule({
-  declarations: [YesNoPipe, ValueOrDashPipe, SafePipe],
+  declarations: [YesNoPipe, ValueOrDashPipe, SafePipe, ProgressIndicatorDirective],
   imports: [HttpClientModule, FormsModule, ReactiveFormsModule],
-  exports: [YesNoPipe, ValueOrDashPipe, SafePipe],
+  exports: [YesNoPipe, ValueOrDashPipe, SafePipe, ProgressIndicatorDirective],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
@@ -20,6 +22,11 @@ import { DateParserInterceptor } from './rest/date-parser.interceptor';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: PwaLaunchModeInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useExisting: ProgressIndicatorInterceptor,
       multi: true,
     },
   ],
