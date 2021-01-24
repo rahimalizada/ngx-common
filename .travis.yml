@@ -1,0 +1,31 @@
+# dist: trusty
+sudo: false
+
+language: node_js
+node_js:
+  - "node"
+
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+
+cache:
+  directories:
+    - ./node_modules
+
+install:
+  - npm install
+
+script:
+  - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+  - ng build --prod
+
+deploy:
+  provider: npm
+  email: "rahim.alizada@gmail.com"
+  api_key: "de18a1e8-5dcd-49b1-9b52-8ead9b47203c"
+  on:
+    tags: true
