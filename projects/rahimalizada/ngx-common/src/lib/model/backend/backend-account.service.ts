@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AbstractRestService, AuthResult } from '@rahimalizada/ngx-common';
+import { AbstractRestService } from '../../rest/abstract-rest.service';
+import { AuthResult } from '../auth/auth-result.model';
 import { BackendAccount } from './backend-account.model';
 
 @Injectable({
