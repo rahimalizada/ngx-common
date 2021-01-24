@@ -42,6 +42,9 @@
   "bugs": {
     "url": "https://github.com/rahimalizada/ngx-common/issues"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "@angular/common": "^11.1.0",
     "@angular/core": "^11.1.0",
