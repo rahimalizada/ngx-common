@@ -27,6 +27,7 @@ script:
 deploy:
   provider: npm
   email: "rahim.alizada@gmail.com"
-  api_token: "6d9f3165-2f79-42d2-aa70-54f30ccb4831"
+  api_token:
+    secure: "o9v4N5NRowf6Dem0QzWw4qoa9BTqITerbE/uqs48Jcv/LYYUqoc9X6L3wcYzguM17i1Kyfh+9MWWVr87LX1GdnmHmGdGb5+8D8WOhCRmlRl8gZuKQX9MF5tb+H8iqaT6rSe4mCbzPG6AY8o104axkbw4+421O2AwjBLR/tvFQN8XM0eYPflant5bdxGs422ag63KfpgJJkYwQO0NFLq95/5GQY7f3bx75jIHfyyrUHpfEWs0iu9e8yRXpc3u++IPP6nI9cjQOCdg67Qs4qESX97CRx+JizRVH6G+S++6Yy6v6ngq355G+CumtKAMKlyrgkmucVvbGodR/9dtuEdIzkIhYdb1B40fMpUjdfbFsq8zA4uS8/UA8MxJDk2Ow5LWR78AontQeQMH+L5SJqABf4u07JfLb0+srel7jjB4Y4rFAsnY8alVnQLpK4zrVbfIQMUXi5VE6kD3yiXeh7+jXoAkp36XU9XTUu0jzY7FhzsvA0W6yEsgcVPS+YHMjV7o0XsHrFr1muSwQRSUtK2mbMimZbxd5NUcVNYV2tdx5USv0JRZhwbw/SWK4W9dm1sjm4us33AvCG0WEI0jt/J3ev6pzFsOgbN0hVpynMCxIPLdK2QMNNGRRx0vM6IY1ywBjcmtfvhYzpU7DDYgL8xAuZ1Q7AmX3a0l5TEjAJ6Q7WU="
   on:
     tags: true
