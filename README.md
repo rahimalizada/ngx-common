@@ -1,6 +1,6 @@
 # NgxCommon
 
-[![Build Status](https://www.travis-ci.com/rahimalizada/ngx-common.svg?branch=master)](https://www.travis-ci.com/rahimalizada/ngx-common)
+[![Build Status](https://www.travis-ci.com/rahimalizada/ngx-common.svg?branch=master)](https://www.travis-ci.com/rahimalizada/ngx-common) ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/rahimalizada/ngx-common/master)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.1.0.
 
