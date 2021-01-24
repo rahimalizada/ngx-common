@@ -26,9 +26,9 @@
           "options": {
             "main": "projects/rahimalizada/ngx-common/src/test.ts",
             "tsConfig": "projects/rahimalizada/ngx-common/tsconfig.spec.json",
-            "karmaConfig": "projects/rahimalizada/ngx-common/karma.conf.js"
-          },
-          "codeCoverage": true
+            "karmaConfig": "projects/rahimalizada/ngx-common/karma.conf.js",
+            "codeCoverage": true
+          }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
