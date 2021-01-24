@@ -8,26 +8,33 @@ node_js:
 
 addons:
   apt:
-    sources:
-      - google-chrome
     packages:
       - google-chrome-stable
 
+# cache: npm
 cache:
   directories:
     - ./node_modules
 
 install:
-  - npm install
+  # npm ci is slower since angular compiles dependencies in /node_modules and they can be reused
+  - npm i
 
 script:
+  # - ng lint
   - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
   - ng build --prod
+
+before_deploy:
+  # Deploy from library build folder
+  - cd ${TRAVIS_BUILD_DIR}/dist/rahimalizada/ngx-common
 
 deploy:
   provider: npm
   email: "rahim.alizada@gmail.com"
   api_token:
-    secure: "o9v4N5NRowf6Dem0QzWw4qoa9BTqITerbE/uqs48Jcv/LYYUqoc9X6L3wcYzguM17i1Kyfh+9MWWVr87LX1GdnmHmGdGb5+8D8WOhCRmlRl8gZuKQX9MF5tb+H8iqaT6rSe4mCbzPG6AY8o104axkbw4+421O2AwjBLR/tvFQN8XM0eYPflant5bdxGs422ag63KfpgJJkYwQO0NFLq95/5GQY7f3bx75jIHfyyrUHpfEWs0iu9e8yRXpc3u++IPP6nI9cjQOCdg67Qs4qESX97CRx+JizRVH6G+S++6Yy6v6ngq355G+CumtKAMKlyrgkmucVvbGodR/9dtuEdIzkIhYdb1B40fMpUjdfbFsq8zA4uS8/UA8MxJDk2Ow5LWR78AontQeQMH+L5SJqABf4u07JfLb0+srel7jjB4Y4rFAsnY8alVnQLpK4zrVbfIQMUXi5VE6kD3yiXeh7+jXoAkp36XU9XTUu0jzY7FhzsvA0W6yEsgcVPS+YHMjV7o0XsHrFr1muSwQRSUtK2mbMimZbxd5NUcVNYV2tdx5USv0JRZhwbw/SWK4W9dm1sjm4us33AvCG0WEI0jt/J3ev6pzFsOgbN0hVpynMCxIPLdK2QMNNGRRx0vM6IY1ywBjcmtfvhYzpU7DDYgL8xAuZ1Q7AmX3a0l5TEjAJ6Q7WU="
+    # Generated per repository
+    secure: "omxrCNuSXuyMJtLvvw/7y8KA/sPr9m7merSHs8xsISUCiB7i5RibSbms+G9ZXMzDvKp4yCgEmGvxcjLNOdUFCWmmhrcaqh7ZjqgOmg2d6YCwiilYlKT381qqZxJEkV3EEQfy/YO67EoU7GJSpaBbAgqTA8gghyZjld7PJRaIPGvzVyB1+JxHLrQC0rFoHgIu1Jrq5vCias196Dvr8ipnPQuCEZE+lq9htfZ1z0HucqB+NzcvvyxlbK0Cphs7tiWeW4B0h3W+wkQSCu+tj2O2GXwjNFVMFQmBF+eAbyds5GKhZL5LDGYzjjoOZiwKWizVFgrJPqVfG0SzIROciCv9EbkVXNl1TursxLi6o/VFd6jeUTZYPqdatXegXS2rP6omI7GYZLPKtICJ1iK3pATuZz6QtVFRtLXpbRUny0hctZIKykkUq2ZSI7CCvtOmiiPtjYVph0zVXddKmO8mgQHvfO7/Uo0HdKICjbnjrsvXw5EkmWK9t9nbAszoEqR4TcnIOQK9uLPZ15ZyG7pYomtJPanBurndr4cgN4fil6qJumeA/n3J+dymWkQaIKE1yrOBHr7LlO67+YIttPvuM9ndSFSTIPInJysTCZm3qEW2RgegyszvkZ+xAIcwYav/pONDtR0wuXlZ3lRD71e8Z4xd4hCe05opwFPA4e0AcCyLrMw="
   on:
     tags: true
+  skip_cleanup: true
