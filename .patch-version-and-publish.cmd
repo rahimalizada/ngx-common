@@ -1,4 +1,4 @@
-set name=ngx-material
+set name=ngx-common
 
 call npm version patch --prefix .\projects\rahimalizada\%name%\
 git add .\projects\rahimalizada\%name%\package.json
