@@ -1,6 +1,7 @@
 import { DOCUMENT, LocationStrategy } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 
+/** @dynamic */
 @Injectable({
   providedIn: 'root',
 })
@@ -8,10 +9,10 @@ export class AppHrefService {
   public appOrigin: string;
   public appBaseHref: string;
 
-  constructor(@Inject(DOCUMENT) private document: Document, private locationStrategy: LocationStrategy) {
-    this.appOrigin = this.document.location.origin;
+  constructor(locationStrategy: LocationStrategy, @Inject(DOCUMENT) document: Document) {
+    this.appOrigin = document.location.origin;
 
-    const base = this.locationStrategy.getBaseHref() === this.document.location.origin ? '/' : this.document.location.origin;
-    this.appBaseHref = new URL(base, this.document.location.origin).href;
+    const base = locationStrategy.getBaseHref() === document.location.origin ? '/' : document.location.origin;
+    this.appBaseHref = new URL(base, document.location.origin).href;
   }
 }
