@@ -2,12 +2,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "paths": {
-      "@rahimalizada/ngx-common": [
-        "dist/rahimalizada/ngx-common/rahimalizada-ngx-common",
-        "dist/rahimalizada/ngx-common"
-      ]
-    },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
@@ -20,12 +14,13 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
+    "paths": {
+      "@rahimalizada/ngx-common": ["dist/rahimalizada/ngx-common/rahimalizada-ngx-common", "dist/rahimalizada/ngx-common"]
+    },
     "target": "es2015",
     "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ]
+    "lib": ["es2018", "dom"],
+    "resolveJsonModule": true // Custom
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
