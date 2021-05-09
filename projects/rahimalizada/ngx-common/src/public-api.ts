@@ -8,6 +8,7 @@ export * from './lib/auth/abstract-jwt.interceptor';
 export * from './lib/auth/with-permissions-check.model';
 export * from './lib/component/abstract-form-component';
 export * from './lib/directives/progress-indicator.directive';
+export * from './lib/helpers/reload-page.helper';
 export * from './lib/interceptors/progress-indicator.interceptor';
 export * from './lib/interceptors/pwa-launch-mode.interceptor';
 export * from './lib/model/account/account-activation-request.model';
@@ -55,4 +56,3 @@ export * from './lib/validators/fields-match-validator';
 export * from './lib/validators/password-validator';
 export * from './lib/validators/pattern-validator';
 export * from './lib/validators/url-validator';
-
