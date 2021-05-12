@@ -1,0 +1,22 @@
+<hr>
+<h3>Yeni status</h3>
+<div class="row">
+  <div class="mt-auto col-md-6">
+    <mat-form-field class="w-100">
+      <mat-select name="status" placeholder="Yeni status" [(value)]="status">
+        <mat-option [value]="option.key" *ngFor="let option of statusData | keyvalue: statusSort ">
+          {{option.value.title}} ({{option.key}})</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="col-md-4">
+    <mat-form-field class="w-100">
+      <textarea matInput placeholder="Statusa aid qeyd" rows="1" name="notes" [(ngModel)]="statusNotes"></textarea>
+    </mat-form-field>
+  </div>
+
+  <div class="my-auto col-md-2">
+    <button mat-raised-button class="mr-2" color="primary" [disabled]="status == null" (click)="updateStatus()">Yeni status əlavə et</button>
+  </div>
+</div>

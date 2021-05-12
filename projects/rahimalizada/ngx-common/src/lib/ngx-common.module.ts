@@ -1,16 +1,18 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { StatusEditComponent } from './component/status-edit/status-edit.component';
+import { StatusListComponent } from './component/status-list/status-list.component';
+import { ProgressIndicatorDirective } from './directives/progress-indicator.directive';
+import { ProgressIndicatorInterceptor } from './interceptors/progress-indicator.interceptor';
 import { PwaLaunchModeInterceptor } from './interceptors/pwa-launch-mode.interceptor';
 import { SafePipe } from './pipes/safe.pipe';
 import { ValueOrDashPipe } from './pipes/value-or-dash.pipe';
 import { YesNoPipe } from './pipes/yes-no.pipe';
-import { ProgressIndicatorDirective } from './directives/progress-indicator.directive';
-import { ProgressIndicatorInterceptor } from './interceptors/progress-indicator.interceptor';
 import { DateParserInterceptor } from './rest/date-parser.interceptor';
 
 @NgModule({
-  declarations: [YesNoPipe, ValueOrDashPipe, SafePipe, ProgressIndicatorDirective],
+  declarations: [YesNoPipe, ValueOrDashPipe, SafePipe, ProgressIndicatorDirective, StatusEditComponent, StatusListComponent],
   imports: [HttpClientModule, FormsModule, ReactiveFormsModule],
   exports: [YesNoPipe, ValueOrDashPipe, SafePipe, ProgressIndicatorDirective],
   providers: [

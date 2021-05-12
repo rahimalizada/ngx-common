@@ -58,4 +58,3 @@ export * from './lib/validators/fields-match-validator';
 export * from './lib/validators/password-validator';
 export * from './lib/validators/pattern-validator';
 export * from './lib/validators/url-validator';
-
