@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -13,7 +14,7 @@ import { DateParserInterceptor } from './rest/date-parser.interceptor';
 
 @NgModule({
   declarations: [YesNoPipe, ValueOrDashPipe, SafePipe, ProgressIndicatorDirective, StatusEditComponent, StatusListComponent],
-  imports: [HttpClientModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, HttpClientModule, FormsModule, ReactiveFormsModule],
   exports: [YesNoPipe, ValueOrDashPipe, SafePipe, ProgressIndicatorDirective, StatusEditComponent, StatusListComponent],
   providers: [
     {
