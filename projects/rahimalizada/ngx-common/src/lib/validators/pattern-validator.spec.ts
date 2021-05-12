@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { PatternValidator } from './pattern-validator';
 
 @Component({
-  selector: 'app-counter',
+  selector: 'lib-counter',
   template: `<form [formGroup]="form">
     <input name="input1" formControlName="input1" />
   </form>`,

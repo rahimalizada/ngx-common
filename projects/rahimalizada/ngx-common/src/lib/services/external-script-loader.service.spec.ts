@@ -1,6 +1,9 @@
 import { ExternalScriptLoaderService } from './external-script-loader.service';
 
-declare const moment: (arg0: string, arg1: string) => { (): any; new (): any; format: { (arg0: string): any; new (): any } };
+declare const moment: (
+  arg0: string,
+  arg1: string,
+) => { (): unknown; new (): unknown; format: { (arg0: string): unknown; new (): unknown } };
 
 describe('ExternalScriptLoaderService', () => {
   let service: ExternalScriptLoaderService;

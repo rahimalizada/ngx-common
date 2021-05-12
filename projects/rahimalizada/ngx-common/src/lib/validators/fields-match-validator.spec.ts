@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { FieldsMatchValidator } from './fields-match-validator';
 
 @Component({
-  selector: 'app-counter',
+  selector: 'lib-counter',
   template: `<form [formGroup]="form">
     <input name="input1" formControlName="input1" />
     <input name="input2" formControlName="input2" />
