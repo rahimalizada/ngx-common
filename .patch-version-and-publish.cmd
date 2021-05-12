@@ -9,6 +9,6 @@ git push origin master
 git push origin --tags
 
 ng build @rahimalizada/%name% --prod
-npm publish .\dist\rahimalizada\%name%\ --access public
+call npm publish .\dist\rahimalizada\%name%\ --access public
 
 pause
