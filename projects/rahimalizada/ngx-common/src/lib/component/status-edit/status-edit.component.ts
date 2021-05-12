@@ -43,6 +43,10 @@ export class StatusEditComponent {
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
 
+  getTitle(statusSpec: unknown): string {
+    return (statusSpec as StatusSpec).title;
+  }
+
   updateStatus(): void {
     this.method({ accountId: this.accountId, status: this.status, notes: this.statusNotes, created: new Date() }).subscribe(
       () => {

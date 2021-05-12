@@ -5,7 +5,7 @@
     <mat-form-field class="w-100">
       <mat-select name="status" placeholder="Yeni status" [(value)]="status">
         <mat-option [value]="option.key" *ngFor="let option of statusData | keyvalue: statusSort ">
-          {{option.value.title}} ({{option.key}})</mat-option>
+          {{getTitle(option.value)}} ({{option.key}})</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
