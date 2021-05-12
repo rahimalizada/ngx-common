@@ -8,7 +8,7 @@ call npm version patch --force
 git push origin master
 git push origin --tags
 
-ng build @rahimalizada/%name% --prod
+call ng build @rahimalizada/%name% --prod
 call npm publish .\dist\rahimalizada\%name%\ --access public
 
 pause
