@@ -14,7 +14,7 @@ import { DateParserInterceptor } from './rest/date-parser.interceptor';
 @NgModule({
   declarations: [YesNoPipe, ValueOrDashPipe, SafePipe, ProgressIndicatorDirective, StatusEditComponent, StatusListComponent],
   imports: [HttpClientModule, FormsModule, ReactiveFormsModule],
-  exports: [YesNoPipe, ValueOrDashPipe, SafePipe, ProgressIndicatorDirective],
+  exports: [YesNoPipe, ValueOrDashPipe, SafePipe, ProgressIndicatorDirective, StatusEditComponent, StatusListComponent],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
