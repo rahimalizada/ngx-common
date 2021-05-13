@@ -100,7 +100,7 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     return this.http.post<void>(this.apiPath + '/reset-password/confirmation', data);
   }
 
-  // Comma separated
+  // Comma separated, AND
   hasPermissions(requiredPermissions: string): boolean {
     return this.shiroTrie.check(requiredPermissions);
   }
