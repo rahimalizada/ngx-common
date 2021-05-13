@@ -22,7 +22,7 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     this.loadStorage();
   }
 
-  isTokenExpired(token: string) {
+  isTokenExpired(token: string): boolean {
     try {
       const expired = this.jwtHelper.isTokenExpired(token);
       if (expired) {
@@ -35,18 +35,18 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     }
     return false;
   }
-  saveStorage(authResult: T) {
+  saveStorage(authResult: T): void {
     localStorage.setItem(this.storageItemId, JSON.stringify(authResult));
     this.loggedInSubject.next(this.isValid(authResult));
     this.authResultSubject.next(authResult);
   }
 
-  isLoggedIn() {
+  isLoggedIn(): boolean {
     this.loggedInSubject.next(this.isValid(this.authResultSubject.value));
     return this.loggedInSubject.value;
   }
 
-  renewToken() {
+  renewToken(): Observable<T | null> {
     if (!this.authResultSubject.value || !this.authResultSubject.value.refreshToken) {
       this.logout();
       return new Observable((observer: Observer<T | null>) => {
@@ -54,20 +54,18 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
         observer.complete();
       });
     }
-    return this.http
-      .post<T>(this.apiPath + '/renew-token', { refreshToken: this.authResultSubject.value.refreshToken })
-      .pipe(
-        tap(
-          (authResult) => {
-            console.log('Token renewed, expiration date: ' + this.jwtHelper.getTokenExpirationDate(authResult.token));
-            this.saveStorage(authResult);
-          },
-          (error) => {
-            console.log('Token renewal failed');
-            this.logout();
-          },
-        ),
-      );
+    return this.http.post<T>(this.apiPath + '/renew-token', { refreshToken: this.authResultSubject.value.refreshToken }).pipe(
+      tap(
+        (authResult) => {
+          console.log('Token renewed, expiration date: ' + this.jwtHelper.getTokenExpirationDate(authResult.token));
+          this.saveStorage(authResult);
+        },
+        () => {
+          console.log('Token renewal failed');
+          this.logout();
+        },
+      ),
+    );
   }
 
   logout() {
@@ -76,34 +74,34 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     this.authResultSubject.next(null);
   }
 
-  register(data: any) {
+  register(data: any): Observable<T> {
     return this.http.post<T>(this.apiPath + '/register', data).pipe(
       tap(
         (result) => this.saveStorage(result),
-        (error) => this.logout(),
+        () => this.logout(),
       ),
     );
   }
 
-  login(data: any) {
+  login(data: any): Observable<T> {
     return this.http.post<T>(this.apiPath + '/login', data).pipe(
       tap(
         (result) => this.saveStorage(result),
-        (error) => this.logout(),
+        () => this.logout(),
       ),
     );
   }
 
-  resetPasswordRequest(data: any) {
+  resetPasswordRequest(data: any): Observable<void> {
     return this.http.post<void>(this.apiPath + '/reset-password/request', data);
   }
 
-  resetPasswordConfirmation(data: any) {
+  resetPasswordConfirmation(data: any): Observable<void> {
     return this.http.post<void>(this.apiPath + '/reset-password/confirmation', data);
   }
 
   // Comma separated
-  hasPermissions(requiredPermissions: string) {
+  hasPermissions(requiredPermissions: string): boolean {
     return this.shiroTrie.check(requiredPermissions);
   }
 
@@ -120,11 +118,11 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     return true;
   }
 
-  private deleteStorage() {
+  private deleteStorage(): void {
     localStorage.removeItem(this.storageItemId);
   }
 
-  private loadStorage() {
+  private loadStorage(): void {
     const storageItem = localStorage.getItem(this.storageItemId);
     if (storageItem === null) {
       return;
