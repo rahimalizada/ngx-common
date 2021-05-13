@@ -21,10 +21,10 @@ export abstract class AbstractAuthGuard<T extends { token: string; refreshToken:
       );
     }
 
-    if (route.data.allPermissions && !this.authService.hasAllPermissions(route.data.allPermissions)) {
+    if (route.data.allPermissions && !this.authService.hasAllPermissions(...route.data.allPermissions)) {
       console.log(`To perform this operation this account lacks all required permissions '${route.data.allPermissions}'`);
       return false;
-    } else if (route.data.anyPermissions && !this.authService.hasAnyPermissions(route.data.anyPermissions)) {
+    } else if (route.data.anyPermissions && !this.authService.hasAnyPermissions(...route.data.anyPermissions)) {
       console.log(`To perform this operation this account lacks any required permissions '${route.data.anyPermissions}'`);
       return false;
     }
