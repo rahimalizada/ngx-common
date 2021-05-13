@@ -5,7 +5,6 @@ export interface BackendAccount extends WithCredentials<string> {
   firstName: string;
   lastName: string;
   passwordHash: string;
-  accountRoles: string[];
+  roles: string[];
   permissions: string[];
-  roleNames: string[];
 }

@@ -4,8 +4,9 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { AbstractAuthService } from './abstract-auth.service';
 
-export abstract class AbstractJwtInterceptor<T extends { token: string; refreshToken: string; roles: string[] }>
-  implements HttpInterceptor {
+export abstract class AbstractJwtInterceptor<T extends { token: string; refreshToken: string; permissions: string[] }>
+  implements HttpInterceptor
+{
   constructor(
     private clientId: string,
     private authService: AbstractAuthService<T>,

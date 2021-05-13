@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, Observer } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import * as shiro from 'shiro-trie';
 
-export abstract class AbstractAuthService<T extends { token: string; refreshToken: string; roles: string[] }> {
+export abstract class AbstractAuthService<T extends { token: string; refreshToken: string; permissions: string[] }> {
   loggedInSubject = new BehaviorSubject<boolean>(false);
   authResultSubject = new BehaviorSubject<T | null>(null);
   shiroTrie = shiro.newTrie();
@@ -15,7 +15,7 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     this.authResultSubject.subscribe((authResult) => {
       if (authResult) {
         this.shiroTrie.reset();
-        this.shiroTrie.add(...authResult.roles);
+        this.shiroTrie.add(...authResult.permissions);
       }
     });
 
@@ -100,9 +100,12 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     return this.http.post<void>(this.apiPath + '/reset-password/confirmation', data);
   }
 
-  // Comma separated, AND
-  hasPermissions(requiredPermissions: string): boolean {
-    return this.shiroTrie.check(requiredPermissions);
+  hasAllPermissions(...permissions: string[]): boolean {
+    return permissions.map((permission) => this.shiroTrie.check(permission)).filter((check) => check === false).length === 0;
+  }
+
+  hasAnyPermissions(...permissions: string[]): boolean {
+    return permissions.map((permission) => this.shiroTrie.check(permission)).filter((check) => check === true).length > 0;
   }
 
   private isValid(authResult: T | null): boolean {

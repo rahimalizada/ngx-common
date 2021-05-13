@@ -7,7 +7,7 @@ import { AbstractAuthService } from '../../public-api';
 export class Constants {}
 
 @Injectable({ providedIn: 'root' })
-export class TestAuthService<T extends { token: string; refreshToken: string; roles: string[] }> extends AbstractAuthService<T> {
+export class TestAuthService<T extends { token: string; refreshToken: string; permissions: string[] }> extends AbstractAuthService<T> {
   public static readonly storageItemId = 'test-storage';
   public static readonly apiPath = '/api/auth';
 
@@ -18,13 +18,17 @@ export class TestAuthService<T extends { token: string; refreshToken: string; ro
     // eslint-disable-next-line max-len
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE1MTYyMzkwMjJ9.4Adcj3UFYzPUVaVF43FmMab6RlaQD8A9V8wFzzht-KQ';
 
-  public static readonly validAuthResult = { token: TestAuthService.validToken, refreshToken: TestAuthService.validToken, roles: ['*'] };
+  public static readonly validAuthResult = {
+    token: TestAuthService.validToken,
+    refreshToken: TestAuthService.validToken,
+    permissions: ['*'],
+  };
   public static readonly expiredAuthResult = {
     token: TestAuthService.expiredToken,
     refreshToken: TestAuthService.expiredToken,
-    roles: ['read', 'write'],
+    permissions: ['read', 'write'],
   };
-  public static readonly invalidAuthResult = { token: 'invalid', refreshToken: null, roles: ['-'] };
+  public static readonly invalidAuthResult = { token: 'invalid', refreshToken: null, permissions: ['-'] };
 
   constructor(httpClient: HttpClient) {
     super(TestAuthService.storageItemId, httpClient, TestAuthService.apiPath);
@@ -83,15 +87,15 @@ describe('AbstractAuthService with invalid state in local storage', () => {
     expect(service.isLoggedIn()).toBe(false);
   });
 
-  it('should test roles properly', () => {
-    expect(service.hasPermissions('*')).toBe(false);
-    expect(service.hasPermissions('read')).toBe(false);
-    expect(service.hasPermissions('write')).toBe(false);
-    expect(service.hasPermissions('read,write')).toBe(false);
-    expect(service.hasPermissions('read, write')).toBe(false);
-    expect(service.hasPermissions('read,write,update')).toBe(false);
-    expect(service.hasPermissions('read, write, update')).toBe(false);
-    expect(service.hasPermissions('-')).toBe(true);
+  it('should test permissions properly', () => {
+    expect(service.hasAllPermissions('*')).toBe(false);
+    expect(service.hasAllPermissions('read')).toBe(false);
+    expect(service.hasAllPermissions('write')).toBe(false);
+    expect(service.hasAllPermissions('read', 'write')).toBe(false);
+    expect(service.hasAllPermissions('read', ' write')).toBe(false);
+    expect(service.hasAllPermissions('read', 'write', 'update')).toBe(false);
+    expect(service.hasAllPermissions('read', 'write', 'update')).toBe(false);
+    expect(service.hasAllPermissions('-')).toBe(true);
   });
 });
 
@@ -105,15 +109,15 @@ describe('AbstractAuthService with expired state in local storage', () => {
     expect(service.isLoggedIn()).toBe(false);
   });
 
-  it('should test roles properly', () => {
-    expect(service.hasPermissions('*')).toBe(false);
-    expect(service.hasPermissions('read')).toBe(true);
-    expect(service.hasPermissions('write')).toBe(true);
-    expect(service.hasPermissions('read,write')).toBe(true);
-    expect(service.hasPermissions('read, write')).toBe(false);
-    expect(service.hasPermissions('read,write,update')).toBe(false);
-    expect(service.hasPermissions('read, write, update')).toBe(false);
-    expect(service.hasPermissions('-')).toBe(false);
+  it('should test permissions properly', () => {
+    expect(service.hasAllPermissions('*')).toBe(false);
+    expect(service.hasAllPermissions('read')).toBe(true);
+    expect(service.hasAllPermissions('write')).toBe(true);
+    expect(service.hasAllPermissions('read', 'write')).toBe(true);
+    expect(service.hasAllPermissions('read', ' write')).toBe(false);
+    expect(service.hasAllPermissions('read', 'write', 'update')).toBe(false);
+    expect(service.hasAllPermissions('read', 'write', 'update')).toBe(false);
+    expect(service.hasAllPermissions('-')).toBe(false);
   });
 });
 
@@ -133,15 +137,15 @@ describe('AbstractAuthService with valid state in local storage', () => {
     expect(localStorage.getItem(TestAuthService.storageItemId)).toBeNull();
   });
 
-  it('should test roles properly', () => {
-    expect(service.hasPermissions('*')).toBe(true);
-    expect(service.hasPermissions('read')).toBe(true);
-    expect(service.hasPermissions('write')).toBe(true);
-    expect(service.hasPermissions('read,write')).toBe(true);
-    expect(service.hasPermissions('read, write')).toBe(true);
-    expect(service.hasPermissions('read,write,update')).toBe(true);
-    expect(service.hasPermissions('read, write, update')).toBe(true);
-    expect(service.hasPermissions('-')).toBe(true);
+  it('should test permissions properly', () => {
+    expect(service.hasAllPermissions('*')).toBe(true);
+    expect(service.hasAllPermissions('read')).toBe(true);
+    expect(service.hasAllPermissions('write')).toBe(true);
+    expect(service.hasAllPermissions('read', 'write')).toBe(true);
+    expect(service.hasAllPermissions('read', 'write')).toBe(true);
+    expect(service.hasAllPermissions('read', 'write', 'update')).toBe(true);
+    expect(service.hasAllPermissions('read', 'write', 'update')).toBe(true);
+    expect(service.hasAllPermissions('-')).toBe(true);
   });
 });
 
@@ -149,7 +153,7 @@ describe('AbstractAuthService login', () => {
   sharedSetup();
 
   it('should save expired state to local storage', () => {
-    service.login({}).subscribe((res) => {
+    service.login({}).subscribe(() => {
       expect(service.isLoggedIn()).toBe(false);
       expect(localStorage.getItem(TestAuthService.storageItemId)).not.toBeNull();
     });
@@ -160,7 +164,7 @@ describe('AbstractAuthService login', () => {
   });
 
   it('should save invalid state to local storage', () => {
-    service.login({}).subscribe((res) => {
+    service.login({}).subscribe(() => {
       expect(service.isLoggedIn()).toBe(false);
       expect(localStorage.getItem(TestAuthService.storageItemId)).not.toBeNull();
     });
@@ -171,7 +175,7 @@ describe('AbstractAuthService login', () => {
   });
 
   it('should save valid state to local storage', () => {
-    service.login({}).subscribe((res) => {
+    service.login({}).subscribe(() => {
       expect(service.isLoggedIn()).toBe(true);
       expect(localStorage.getItem(TestAuthService.storageItemId)).not.toBeNull();
     });
@@ -183,7 +187,7 @@ describe('AbstractAuthService login', () => {
 
   it('should logout on invalid result', () => {
     service.login({}).subscribe(
-      (res) => {},
+      () => {},
       (err) => {
         expect(service.isLoggedIn()).toBe(false);
         expect(localStorage.getItem(TestAuthService.storageItemId)).toBeNull();
@@ -201,7 +205,7 @@ describe('AbstractAuthService registration', () => {
   sharedSetup();
 
   it('should save expired state to local storage', () => {
-    service.register({}).subscribe((res) => {
+    service.register({}).subscribe(() => {
       expect(service.isLoggedIn()).toBe(false);
       expect(localStorage.getItem(TestAuthService.storageItemId)).not.toBeNull();
     });
@@ -212,7 +216,7 @@ describe('AbstractAuthService registration', () => {
   });
 
   it('should save invalid state to local storage', () => {
-    service.register({}).subscribe((res) => {
+    service.register({}).subscribe(() => {
       expect(service.isLoggedIn()).toBe(false);
       expect(localStorage.getItem(TestAuthService.storageItemId)).not.toBeNull();
     });
@@ -223,7 +227,7 @@ describe('AbstractAuthService registration', () => {
   });
 
   it('should save valid state to local storage', () => {
-    service.register({}).subscribe((res) => {
+    service.register({}).subscribe(() => {
       expect(service.isLoggedIn()).toBe(true);
       expect(localStorage.getItem(TestAuthService.storageItemId)).not.toBeNull();
     });
@@ -253,7 +257,7 @@ describe('AbstractAuthService token renewal without state', () => {
   sharedSetup();
 
   it('should logout', () => {
-    service.renewToken().subscribe((res) => {
+    service.renewToken().subscribe(() => {
       expect(service.isLoggedIn()).toBe(false);
       expect(localStorage.getItem(TestAuthService.storageItemId)).toBeNull();
     });
@@ -267,7 +271,7 @@ describe('AbstractAuthService token renewal with invalid state', () => {
   sharedSetup();
 
   it('should logout', () => {
-    service.renewToken().subscribe((res) => {
+    service.renewToken().subscribe(() => {
       expect(service.isLoggedIn()).toBe(false);
       expect(localStorage.getItem(TestAuthService.storageItemId)).toBeNull();
     });
@@ -281,7 +285,7 @@ describe('AbstractAuthService token renewal with valid state', () => {
   sharedSetup();
 
   it('should login on valid result', () => {
-    service.renewToken().subscribe((res) => {
+    service.renewToken().subscribe(() => {
       expect(service.isLoggedIn()).toBe(true);
       expect(localStorage.getItem(TestAuthService.storageItemId)).not.toBeNull();
     });

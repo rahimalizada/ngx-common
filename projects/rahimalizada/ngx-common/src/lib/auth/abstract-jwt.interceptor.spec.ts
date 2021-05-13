@@ -25,7 +25,7 @@ class DataService {
 }
 
 @Injectable()
-class TestJWTInterceptor<T extends { token: string; refreshToken: string; roles: string[] }> extends AbstractJwtInterceptor<T> {
+class TestJWTInterceptor<T extends { token: string; refreshToken: string; permissions: string[] }> extends AbstractJwtInterceptor<T> {
   constructor(authService: TestAuthService<T>, r: Router) {
     super('Test client ver. 1.2.3', authService, r, '/test/auth/login');
   }

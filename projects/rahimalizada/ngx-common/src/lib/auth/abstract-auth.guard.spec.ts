@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, Observer } from 'rxjs';
 import { AbstractAuthGuard } from '../../public-api';
 import { TestAuthService } from './abstract-auth.service.spec';
 
+type AuthResult = { token: string; refreshToken: string; permissions: string[] };
+
 @Injectable({ providedIn: 'root' })
-class TestUserGuard<T extends { token: string; refreshToken: string; roles: string[] }> extends AbstractAuthGuard<T> {
+class TestUserGuard<T extends { token: string; refreshToken: string; permissions: string[] }> extends AbstractAuthGuard<T> {
   constructor(authService: TestAuthService<T>, r: Router) {
     super(authService, r, 'auth/login');
   }
@@ -13,7 +15,6 @@ class TestUserGuard<T extends { token: string; refreshToken: string; roles: stri
 
 let router: Router;
 let routeSnapshot: ActivatedRouteSnapshot;
-let routeState: RouterStateSnapshot;
 let service: jasmine.SpyObj<TestAuthService<any>>;
 let guard: TestUserGuard<any>;
 let trueObservable: Observable<boolean>;
@@ -25,7 +26,7 @@ function sharedSetup() {
     routeSnapshot = jasmine.createSpyObj('ActivatedRouteSnapshot', ['']);
     routeSnapshot.data = {};
     router = jasmine.createSpyObj('Router', ['navigate']);
-    service = jasmine.createSpyObj('TestAuthService', ['isLoggedIn', 'renewToken', 'hasPermissions']);
+    service = jasmine.createSpyObj('TestAuthService', ['isLoggedIn', 'renewToken', 'hasAllPermissions', 'hasAnyPermissions']);
     guard = new TestUserGuard(service, router);
     trueObservable = new Observable((observer: Observer<boolean>) => {
       observer.next(true);
@@ -42,7 +43,7 @@ function sharedSetup() {
 
     service.isLoggedIn.and.returnValue(true);
     service.renewToken.and.returnValue(trueObservable);
-    service.hasPermissions.and.returnValue(true);
+    service.hasAllPermissions.and.returnValue(true);
   });
 }
 
@@ -54,37 +55,37 @@ describe('AbstractUserGuard', () => {
   });
 
   it('should allow navigation if logged in', () => {
-    expect(guard.canActivate(routeSnapshot, routeState)).toBe(true);
-    expect(guard.canActivateChild(routeSnapshot, routeState)).toBe(true);
+    expect(guard.canActivate(routeSnapshot)).toBe(true);
+    expect(guard.canActivateChild(routeSnapshot)).toBe(true);
   });
 
   it('should allow navigation if logged in and proper permissions exists', () => {
-    routeSnapshot.data = { roles: ['user'] };
-    expect(guard.canActivate(routeSnapshot, routeState)).toBe(true);
+    routeSnapshot.data = { allPermissions: ['user'] };
+    expect(guard.canActivate(routeSnapshot)).toBe(true);
   });
 
   it('should not allow navigation if logged in and permissions are missing', () => {
-    service.hasPermissions.and.returnValue(false);
-    routeSnapshot.data = { roles: ['user'] };
-    expect(guard.canActivate(routeSnapshot, routeState)).toBe(false);
+    service.hasAllPermissions.and.returnValue(false);
+    routeSnapshot.data = { allPermissions: ['user'] };
+    expect(guard.canActivate(routeSnapshot)).toBe(false);
   });
 
   it('should renew token and return logged in state', () => {
     service.isLoggedIn.and.returnValue(false);
-    (guard.canActivate(routeSnapshot, routeState) as Observable<boolean>).subscribe((res) => expect(res).toBe(false));
+    (guard.canActivate(routeSnapshot) as Observable<boolean>).subscribe((res) => expect(res).toBe(false));
   });
 
   it('should renew token and return logged in state', () => {
     service.isLoggedIn.and.returnValue(false);
     service.renewToken.and.returnValue(falseObservable);
-    (guard.canActivate(routeSnapshot, routeState) as Observable<boolean>).subscribe((res) => expect(res).toBe(false));
+    (guard.canActivate(routeSnapshot) as Observable<boolean>).subscribe((res) => expect(res).toBe(false));
   });
 
   it('should renew token and return logged in state', () => {
     service.isLoggedIn.and.returnValue(false);
     service.renewToken.and.returnValue(errorObservable);
-    (guard.canActivate(routeSnapshot, routeState) as Observable<boolean>).subscribe(
-      () => {},
+    (guard.canActivate(routeSnapshot) as Observable<boolean>).subscribe(
+      () => undefined,
       (err) => {
         console.log(err);
         expect(err).toBe('error');

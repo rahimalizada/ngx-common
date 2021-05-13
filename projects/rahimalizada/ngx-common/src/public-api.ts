@@ -30,7 +30,7 @@ export * from './lib/model/credentials/credentials-activation-code.model';
 export * from './lib/model/credentials/credentials-reset-code.model';
 export * from './lib/model/credentials/credentials.model';
 export * from './lib/model/credentials/with-credentials.model';
-export * from './lib/model/credentials/with-security-roles.model';
+export * from './lib/model/credentials/with-permissions.model';
 export * from './lib/model/mongodb/object-id.model';
 export * from './lib/model/oplog/oplog.model';
 export * from './lib/model/pager/pager-request-filters-type.enum';
