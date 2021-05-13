@@ -4,10 +4,10 @@ export class WithPermissionsCheck<T extends { token: string; refreshToken: strin
   constructor(protected authService: AbstractAuthService<T>) {}
 
   hasAllPermissions(...permissions: string[]): boolean {
-    return this.authService.hasAllPermissions(...permissions);
+    return this.authService.isLoggedIn() && this.authService.hasAllPermissions(...permissions);
   }
 
   hasAnyPermissions(...permissions: string[]): boolean {
-    return this.authService.hasAnyPermissions(...permissions);
+    return this.authService.isLoggedIn() && this.authService.hasAnyPermissions(...permissions);
   }
 }
