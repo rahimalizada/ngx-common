@@ -68,13 +68,13 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     );
   }
 
-  logout() {
+  logout(): void {
     this.deleteStorage();
     this.loggedInSubject.next(false);
     this.authResultSubject.next(null);
   }
 
-  register(data: any): Observable<T> {
+  register(data: unknown): Observable<T> {
     return this.http.post<T>(this.apiPath + '/register', data).pipe(
       tap(
         (result) => this.saveStorage(result),
@@ -83,7 +83,7 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     );
   }
 
-  login(data: any): Observable<T> {
+  login(data: unknown): Observable<T> {
     return this.http.post<T>(this.apiPath + '/login', data).pipe(
       tap(
         (result) => this.saveStorage(result),
@@ -92,11 +92,11 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
     );
   }
 
-  resetPasswordRequest(data: any): Observable<void> {
+  resetPasswordRequest(data: unknown): Observable<void> {
     return this.http.post<void>(this.apiPath + '/reset-password/request', data);
   }
 
-  resetPasswordConfirmation(data: any): Observable<void> {
+  resetPasswordConfirmation(data: unknown): Observable<void> {
     return this.http.post<void>(this.apiPath + '/reset-password/confirmation', data);
   }
 
