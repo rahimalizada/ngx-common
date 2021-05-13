@@ -3,7 +3,7 @@ import { StatusUpdate } from '../../model/status-update/status-update.model';
 
 type Status = unknown;
 type StatusSpec = { title: string; description: string; textClass: string };
-type StatusData = { get(status: Status): StatusSpec };
+type StatusData = Map<Status, StatusSpec>;
 
 @Component({
   selector: 'lib-status-list[statusUpdates][statusData]',

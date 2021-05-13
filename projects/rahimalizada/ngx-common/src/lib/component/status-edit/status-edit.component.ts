@@ -4,16 +4,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { reloadPage } from '../../helpers/reload-page.helper';
 import { StatusUpdate } from '../../model/status-update/status-update.model';
+import { GenericEnumSort } from './../../helpers/enum-sort';
 
 type Status = unknown;
 type StatusSpec = { title: string; description: string; textClass: string };
-type StatusData = { get(status: Status): StatusSpec };
+type StatusData = Map<Status, StatusSpec>;
 type StatusSort = (a: KeyValue<string, Status>, b: KeyValue<string, Status>) => number;
 type Method = (statusUpdate: StatusUpdate<Status>) => Observable<unknown>;
 type NotificationService = { info(value: string): void; error(value: string): void };
 
 @Component({
-  selector: 'lib-status-edit[accountId][status][statusData][statusSort][method]',
+  selector: 'lib-status-edit[accountId][status][statusData][method]',
   templateUrl: './status-edit.component.html',
   styleUrls: ['./status-edit.component.scss'],
 })
@@ -28,7 +29,7 @@ export class StatusEditComponent {
   statusData!: StatusData;
 
   @Input()
-  statusSort!: StatusSort;
+  statusSort: StatusSort = GenericEnumSort;
 
   @Input()
   method!: Method;
