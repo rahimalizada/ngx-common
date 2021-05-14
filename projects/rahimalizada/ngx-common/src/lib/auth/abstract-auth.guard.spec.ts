@@ -2,24 +2,20 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, Observer } from 'rxjs';
 import { AbstractAuthGuard } from '../../public-api';
-import { TestAuthService } from './abstract-auth.service.spec';
-
-type AuthResult = { token: string; refreshToken: string; permissions: string[] };
+import { TestAuthResult, TestAuthService } from './abstract-auth.service.spec';
 
 @Injectable({ providedIn: 'root' })
-class TestUserGuard<T extends { token: string; refreshToken: string; permissions: string[] }> extends AbstractAuthGuard<T> {
-  constructor(authService: TestAuthService<T>, r: Router) {
+class TestUserGuard extends AbstractAuthGuard<TestAuthResult> {
+  constructor(authService: TestAuthService, r: Router) {
     super(authService, r, 'auth/login');
   }
 }
 
 let router: Router;
 let routeSnapshot: ActivatedRouteSnapshot;
-let service: jasmine.SpyObj<TestAuthService<any>>;
-let guard: TestUserGuard<any>;
-let trueObservable: Observable<boolean>;
-let falseObservable: Observable<boolean>;
-let errorObservable: Observable<boolean>;
+let service: jasmine.SpyObj<TestAuthService>;
+let guard: TestUserGuard;
+let authResultObservable: Observable<TestAuthResult>;
 
 function sharedSetup() {
   beforeEach(() => {
@@ -28,21 +24,13 @@ function sharedSetup() {
     router = jasmine.createSpyObj('Router', ['navigate']);
     service = jasmine.createSpyObj('TestAuthService', ['isLoggedIn', 'renewToken', 'hasAllPermissions', 'hasAnyPermissions']);
     guard = new TestUserGuard(service, router);
-    trueObservable = new Observable((observer: Observer<boolean>) => {
-      observer.next(true);
-      observer.complete();
-    });
-    falseObservable = new Observable((observer: Observer<boolean>) => {
-      observer.next(false);
-      observer.complete();
-    });
-    errorObservable = new Observable((observer: Observer<boolean>) => {
-      observer.error('error');
+    authResultObservable = new Observable((observer: Observer<TestAuthResult>) => {
+      observer.next({} as TestAuthResult);
       observer.complete();
     });
 
     service.isLoggedIn.and.returnValue(true);
-    service.renewToken.and.returnValue(trueObservable);
+    service.renewToken.and.returnValue(authResultObservable);
     service.hasAllPermissions.and.returnValue(true);
   });
 }
@@ -77,13 +65,13 @@ describe('AbstractUserGuard', () => {
 
   it('should renew token and return logged in state', () => {
     service.isLoggedIn.and.returnValue(false);
-    service.renewToken.and.returnValue(falseObservable);
+    service.renewToken.and.returnValue(authResultObservable);
     (guard.canActivate(routeSnapshot) as Observable<boolean>).subscribe((res) => expect(res).toBe(false));
   });
 
   it('should renew token and return logged in state', () => {
     service.isLoggedIn.and.returnValue(false);
-    service.renewToken.and.returnValue(errorObservable);
+    service.renewToken.and.returnValue(authResultObservable);
     (guard.canActivate(routeSnapshot) as Observable<boolean>).subscribe(
       () => undefined,
       (err) => {

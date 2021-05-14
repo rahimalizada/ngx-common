@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Injectable } from '@angular/core';
@@ -6,8 +7,10 @@ import { AbstractAuthService } from '../../public-api';
 
 export class Constants {}
 
+export type TestAuthResult = { token: string; refreshToken: string; permissions: string[] };
+
 @Injectable({ providedIn: 'root' })
-export class TestAuthService<T extends { token: string; refreshToken: string; permissions: string[] }> extends AbstractAuthService<T> {
+export class TestAuthService extends AbstractAuthService<TestAuthResult> {
   public static readonly storageItemId = 'test-storage';
   public static readonly apiPath = '/api/auth';
 
@@ -35,7 +38,7 @@ export class TestAuthService<T extends { token: string; refreshToken: string; pe
   }
 }
 
-let service: TestAuthService<any>;
+let service: TestAuthService;
 let httpTestingController: HttpTestingController;
 
 function sharedSetup() {
@@ -61,7 +64,7 @@ describe('AbstractAuthService', () => {
   });
 
   it('should submit valid reset password request', () => {
-    service.resetPasswordRequest({}).subscribe((res) => {});
+    service.resetPasswordRequest({}).subscribe(() => {});
 
     const req = httpTestingController.expectOne('/api/auth/reset-password/request');
     expect(req.request.method).toEqual('POST');
@@ -69,7 +72,7 @@ describe('AbstractAuthService', () => {
   });
 
   it('should submit valid reset password confirmation', () => {
-    service.resetPasswordConfirmation({}).subscribe((res) => {});
+    service.resetPasswordConfirmation({}).subscribe(() => {});
 
     const req = httpTestingController.expectOne('/api/auth/reset-password/confirmation');
     expect(req.request.method).toEqual('POST');

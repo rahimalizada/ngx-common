@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { Location } from '@angular/common';
 import { HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
@@ -5,7 +6,7 @@ import { Component, Injectable } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router, Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TestAuthService } from './abstract-auth.service.spec';
+import { TestAuthResult, TestAuthService } from './abstract-auth.service.spec';
 import { AbstractJwtInterceptor } from './abstract-jwt.interceptor';
 @Component({ template: '<router-outlet></router-outlet>' })
 class AppComponent {}
@@ -25,8 +26,8 @@ class DataService {
 }
 
 @Injectable()
-class TestJWTInterceptor<T extends { token: string; refreshToken: string; permissions: string[] }> extends AbstractJwtInterceptor<T> {
-  constructor(authService: TestAuthService<T>, r: Router) {
+class TestJWTInterceptor extends AbstractJwtInterceptor<TestAuthResult> {
+  constructor(authService: TestAuthService, r: Router) {
     super('Test client ver. 1.2.3', authService, r, '/test/auth/login');
   }
 }
@@ -57,7 +58,7 @@ describe('AbstractJwtInterceptor without existing token', () => {
   sharedSetup();
 
   it('should not add an Authorization header', () => {
-    dataService.run().subscribe((res) => {});
+    dataService.run().subscribe(() => {});
     const req = httpTestingController.expectOne('http://localhost/path');
 
     expect(req.request.method).toEqual('GET');
