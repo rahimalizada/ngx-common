@@ -5,7 +5,14 @@ import { PagerResult } from '../model/pager/pager-result.model';
 export abstract class AbstractRestService<T> {
   constructor(protected httpClient: HttpClient, protected basePath: string) {}
 
-  buildParams(page: number, pageSize: number, sort: string, sortDirection: string, searchTerms?: string, requestFilters?: any): HttpParams {
+  buildParams(
+    page: number,
+    pageSize: number,
+    sort: string,
+    sortDirection: string,
+    searchTerms?: string,
+    requestFilters?: unknown,
+  ): HttpParams {
     let params = new HttpParams()
       .append('page', page.toString())
       .append('pageSize', pageSize.toString())
@@ -28,7 +35,7 @@ export abstract class AbstractRestService<T> {
     sort: string,
     sortDirection: string,
     searchTerms?: string,
-    requestFilters?: any,
+    requestFilters?: unknown,
   ): Observable<PagerResult<T>> {
     const params = this.buildParams(page, pageSize, sort, sortDirection, searchTerms, requestFilters);
     return this.httpClient.get<PagerResult<T>>(`${this.basePath}/pager`, { params });
@@ -41,7 +48,7 @@ export abstract class AbstractRestService<T> {
     sort: string,
     sortDirection: string,
     searchTerms?: string,
-    requestFilters?: any,
+    requestFilters?: unknown,
   ): Observable<PagerResult<T>> {
     const params = this.buildParams(page, pageSize, sort, sortDirection, searchTerms, requestFilters);
     return this.httpClient.get<PagerResult<T>>(`${this.basePath}/pager/${path}`, {
@@ -49,71 +56,71 @@ export abstract class AbstractRestService<T> {
     });
   }
 
-  getOne() {
+  getOne(): Observable<T> {
     return this.httpClient.get<T>(this.basePath);
   }
 
-  getMany() {
+  getMany(): Observable<T[]> {
     return this.httpClient.get<T[]>(this.basePath);
   }
 
-  getOneByPath(path: string) {
+  getOneByPath(path: string): Observable<T> {
     return this.httpClient.get<T>(`${this.basePath}/${path}`);
   }
 
-  getManyByPath(path: string) {
+  getManyByPath(path: string): Observable<T[]> {
     return this.httpClient.get<T[]>(`${this.basePath}/${path}`);
   }
 
-  putOne(putData: T) {
+  putOne(putData: T): Observable<void> {
     return this.httpClient.put<void>(this.basePath, putData);
   }
 
-  putMany(putData: T[]) {
+  putMany(putData: T[]): Observable<void>  {
     return this.httpClient.put<void>(this.basePath, putData);
   }
 
-  putOneByPath(path: string, putData: T) {
+  putOneByPath(path: string, putData: T) : Observable<void> {
     return this.httpClient.put<void>(`${this.basePath}/${path}`, putData);
   }
 
-  putManyByPath(path: string, putData: T[]) {
+  putManyByPath(path: string, putData: T[]): Observable<void>  {
     return this.httpClient.put<void>(`${this.basePath}/${path}`, putData);
   }
 
-  postOne(postData: T) {
+  postOne(postData: T): Observable<void>  {
     return this.httpClient.post<void>(this.basePath, postData);
   }
 
-  postMany(postData: T[]) {
+  postMany(postData: T[]): Observable<void>  {
     return this.httpClient.post<void>(this.basePath, postData);
   }
 
-  postOneByPath(path: string, postData: T) {
+  postOneByPath(path: string, postData: T): Observable<void>  {
     return this.httpClient.post<void>(`${this.basePath}/${path}`, postData);
   }
 
-  postManyByPath(path: string, postData: T[]) {
+  postManyByPath(path: string, postData: T[]): Observable<void>  {
     return this.httpClient.post<void>(`${this.basePath}/${path}`, postData);
   }
 
-  patchOne(patchData: T) {
+  patchOne(patchData: T): Observable<void>  {
     return this.httpClient.patch<void>(`${this.basePath}`, patchData);
   }
 
-  patchMany(patchData: T[]) {
+  patchMany(patchData: T[]): Observable<void>  {
     return this.httpClient.patch<void>(`${this.basePath}`, patchData);
   }
 
-  patchOneByPath(path: string, patchData: T) {
+  patchOneByPath(path: string, patchData: T): Observable<void>  {
     return this.httpClient.patch<void>(`${this.basePath}/${path}`, patchData);
   }
 
-  patchManyByPath(path: string, patchData: T[]) {
+  patchManyByPath(path: string, patchData: T[]): Observable<void>  {
     return this.httpClient.patch<void>(`${this.basePath}/${path}`, patchData);
   }
 
-  deleteByPath(path: string) {
+  deleteByPath(path: string): Observable<void>  {
     return this.httpClient.delete<void>(`${this.basePath}/${path}`);
   }
 
