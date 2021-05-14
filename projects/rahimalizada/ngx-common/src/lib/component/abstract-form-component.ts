@@ -9,7 +9,7 @@ export class AbstractFormComponent {
 
   constructor(private errorMsg: string = 'Operation failed, please try again shortly.') {}
 
-  isInvalid(ctrlName: string, parent?: string, index?: number) {
+  isInvalid(ctrlName: string, parent?: string, index?: number): boolean {
     const control = this.getControl(ctrlName, parent, index);
     if (!control) {
       return true;
@@ -29,28 +29,28 @@ export class AbstractFormComponent {
     return this.form.get(ctrlName);
   }
 
-  getFormArray(name: string) {
+  getFormArray(name: string): FormArray {
     return this.form.get(name) as FormArray;
   }
 
-  getFormGroup(name: string) {
+  getFormGroup(name: string): FormGroup {
     return this.form.get(name) as FormGroup;
   }
 
-  onCancel() {
+  onCancel(): void {
     this.form.reset();
     this.errorMessage = null;
     this.showSuccessMessage = false;
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.submitButtonDisabled = true;
     this.errorMessage = null;
     this.showSuccessMessage = false;
     this.form.markAllAsTouched();
   }
 
-  handleError(error: HttpErrorResponse) {
+  handleError(error: HttpErrorResponse): void {
     console.log(error);
     this.submitButtonDisabled = false;
     if (error.status >= 400 && error.status <= 499) {

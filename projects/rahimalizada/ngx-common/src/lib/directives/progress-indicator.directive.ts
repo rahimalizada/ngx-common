@@ -15,7 +15,7 @@ export class ProgressIndicatorDirective implements OnDestroy {
   private showHttp = false;
 
   constructor(
-    private templateRef: TemplateRef<any>,
+    private templateRef: TemplateRef<unknown>,
     private viewContainer: ViewContainerRef,
     private router: Router,
     private progressIndicatorInterceptor: ProgressIndicatorInterceptor,
@@ -57,7 +57,7 @@ export class ProgressIndicatorDirective implements OnDestroy {
     }
   }
 
-  redraw() {
+  redraw(): void {
     if (!this.hasView && (this.showNavigation || this.showHttp)) {
       this.viewContainer.createEmbeddedView(this.templateRef);
       this.hasView = true;
