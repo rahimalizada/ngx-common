@@ -10,7 +10,7 @@ type Status = unknown;
 type StatusSpec = { title: string; description: string; textClass: string };
 type StatusData = Map<Status, StatusSpec>;
 type StatusSort = (a: KeyValue<string, Status>, b: KeyValue<string, Status>) => number;
-type Method = (statusUpdate: StatusUpdate<Status>) => Observable<unknown>;
+type Method = (statusUpdate: StatusUpdate<Status>) => Observable<void>;
 type NotificationService = { info(value: string): void; error(value: string): void };
 
 @Component({
