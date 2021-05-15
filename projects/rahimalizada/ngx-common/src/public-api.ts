@@ -21,7 +21,6 @@ export * from './lib/model/auth/register-request.model';
 export * from './lib/model/auth/renew-token-request.model';
 export * from './lib/model/auth/reset-password-confirmation.model';
 export * from './lib/model/auth/reset-password-request.model';
-export * from './lib/model/auth/simple-password-change-request.model';
 export * from './lib/model/backend/backend-account.model';
 export * from './lib/model/backend/backend-account.service';
 export * from './lib/model/batch-update-request.model';
@@ -58,3 +57,4 @@ export * from './lib/validators/fields-match-validator';
 export * from './lib/validators/password-validator';
 export * from './lib/validators/pattern-validator';
 export * from './lib/validators/url-validator';
+
