@@ -6,7 +6,8 @@ import { reloadPage } from '../../helpers/reload-page.helper';
 import { StatusUpdate } from '../../model/status-update/status-update.model';
 import { GenericEnumSort } from './../../helpers/enum-sort';
 
-type Status = unknown;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Status = any;
 type StatusSpec = { title: string; description: string; textClass: string };
 type StatusData = Map<Status, StatusSpec>;
 type StatusSort = (a: KeyValue<string, Status>, b: KeyValue<string, Status>) => number;

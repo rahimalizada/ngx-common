@@ -17,9 +17,9 @@
         <tr *ngFor="let statusUpdate of statusUpdates; let i = index">
           <th scope="row">{{ i + 1 }}</th>
           <td class="text-nowrap" *ngIf="showAccountId">{{statusUpdate.accountId}}</td>
-          <td [ngClass]="statusData.get(statusUpdate.status).textClass">
-            <span title="{{statusUpdate.status}}">{{statusData.get(statusUpdate.status).title}}</span>
-            <br><small>{{statusData.get(statusUpdate.status).description}}</small>
+          <td [ngClass]="statusData.get(statusUpdate.status)!.textClass">
+            <span title="{{statusUpdate.status}}">{{statusData.get(statusUpdate.status)!.title}}</span>
+            <br><small>{{statusData.get(statusUpdate.status)!.description}}</small>
           </td>
           <td class="text-nowrap">{{ statusUpdate.created | date: 'short' }}</td>
           <td>{{ statusUpdate.notes | valueOrDash }}</td>
