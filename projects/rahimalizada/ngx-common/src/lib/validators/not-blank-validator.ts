@@ -2,7 +2,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export class NotBlankValidator {
   static get(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
+    const result = (control: AbstractControl): ValidationErrors | null => {
       const value: string = control.value;
       if (value === undefined || value === null) {
         return { isNull: true };
@@ -15,5 +15,6 @@ export class NotBlankValidator {
       }
       return null;
     };
+    return result;
   }
 }
