@@ -2,11 +2,9 @@ import { CanActivate, CanActivateChild, Router, UrlTree } from '@angular/router'
 import { Observable } from 'rxjs';
 import { AbstractAuthService } from './abstract-auth.service';
 
-export abstract class AbstractRedirectGuard<T extends { token: string; refreshToken: string; permissions: string[] }>
-  implements CanActivate, CanActivateChild
-{
+export abstract class AbstractRedirectGuard implements CanActivate, CanActivateChild {
   constructor(
-    protected authService: AbstractAuthService<T>,
+    protected authService: AbstractAuthService<{ token: string; refreshToken: string; permissions: string[] }>,
     protected router: Router,
     private loggedInRedirect: string,
     private loggedOutRedirect: string,
