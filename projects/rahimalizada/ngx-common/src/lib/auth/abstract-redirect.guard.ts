@@ -13,8 +13,7 @@ export abstract class AbstractRedirectGuard<T extends { token: string; refreshTo
   ) {}
 
   canActivate(): Observable<boolean | UrlTree> | boolean | UrlTree {
-    this.router.navigate([this.authService.isLoggedIn() ? this.loggedInRedirect : this.loggedOutRedirect]);
-    return true;
+    return this.router.createUrlTree([this.authService.isLoggedIn() ? this.loggedInRedirect : this.loggedOutRedirect]);
   }
 
   canActivateChild(): Observable<boolean | UrlTree> | boolean | UrlTree {
