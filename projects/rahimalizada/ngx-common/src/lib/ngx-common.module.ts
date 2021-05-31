@@ -4,7 +4,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { StatusEditComponent } from './component/status-edit/status-edit.component';
 import { StatusListComponent } from './component/status-list/status-list.component';
 import { ProgressIndicatorDirective } from './directives/progress-indicator.directive';
@@ -17,8 +21,31 @@ import { DateParserInterceptor } from './rest/date-parser.interceptor';
 
 @NgModule({
   declarations: [YesNoPipe, ValueOrDashPipe, SafePipe, ProgressIndicatorDirective, StatusEditComponent, StatusListComponent],
-  imports: [CommonModule, HttpClientModule, FormsModule, ReactiveFormsModule, MatButtonModule, MatInputModule, MatSelectModule],
-  exports: [YesNoPipe, ValueOrDashPipe, SafePipe, ProgressIndicatorDirective, StatusEditComponent, StatusListComponent],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatInputModule,
+    MatSelectModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatSortModule,
+    MatSnackBarModule,
+  ],
+  exports: [
+    YesNoPipe,
+    ValueOrDashPipe,
+    SafePipe,
+    ProgressIndicatorDirective,
+    StatusEditComponent,
+    StatusListComponent,
+    MatPaginatorModule,
+    MatTableModule,
+    MatSortModule,
+    MatSnackBarModule,
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
