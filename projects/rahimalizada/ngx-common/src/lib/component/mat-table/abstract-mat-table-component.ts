@@ -47,30 +47,12 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   selection = new SelectionModel<T>(true, []);
   private eventSubscriptions = new Subscription();
 
-  constructor(protected service: AbstractRestService<T>, protected activatedRoute: ActivatedRoute, protected router: Router) {}
-
-  loadData(
-    page: number,
-    pageSize: number,
-    sort: string,
-    sortDirection: string,
-    searchTerms?: string,
-    requestFilters?: unknown,
-  ): Observable<PagerResult<T>> {
-    const result = this.userId
-      ? this.service.pagerByPath(`user/${this.userId}`, page, pageSize, sort, sortDirection, searchTerms, requestFilters)
-      : this.service.pager(page, pageSize, sort, sortDirection, searchTerms, requestFilters);
-    return this.processData(result);
-  }
-
-  protected processData(observable: Observable<PagerResult<T>>): Observable<PagerResult<T>> {
-    return observable.pipe(
-      tap((val) => {
-        this.itemsSubject.next(val.items);
-        this.itemCountChange.next(val.items.length);
-      }),
-    );
-  }
+  constructor(
+    protected service: AbstractRestService<T>,
+    protected activatedRoute: ActivatedRoute,
+    protected router: Router,
+    private pagerPathProvider: () => string | undefined,
+  ) {}
 
   ngOnInit(): void {
     this.userId = this.activatedRoute.snapshot.params.userId;
@@ -107,6 +89,35 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.eventSubscriptions.unsubscribe();
+  }
+
+  private loadData(): Observable<PagerResult<T>> {
+    const pagerPath = this.pagerPathProvider();
+    const observable = pagerPath
+      ? this.service.pagerByPath(
+          pagerPath,
+          this.paginator.pageIndex,
+          this.paginator.pageSize,
+          this.sort.active,
+          this.sort.direction,
+          this.searchTerms,
+          this.requestFilters,
+        )
+      : this.service.pager(
+          this.paginator.pageIndex,
+          this.paginator.pageSize,
+          this.sort.active,
+          this.sort.direction,
+          this.searchTerms,
+          this.requestFilters,
+        );
+
+    return observable.pipe(
+      tap((val) => {
+        this.itemsSubject.next(val.items);
+        this.itemCountChange.next(val.items.length);
+      }),
+    );
   }
 
   loadPageSize(): void {
@@ -172,14 +183,7 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
       startWith(null),
       switchMap(() => {
         this.isLoading = true;
-        return this.loadData(
-          this.paginator.pageIndex,
-          this.paginator.pageSize,
-          this.sort.active,
-          this.sort.direction,
-          this.searchTerms,
-          this.requestFilters,
-        );
+        return this.loadData();
       }),
       tap(() => (this.isLoading = false)),
       catchError(() => {
