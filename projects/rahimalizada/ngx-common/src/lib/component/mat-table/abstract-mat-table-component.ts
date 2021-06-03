@@ -30,13 +30,14 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   @ViewChild(MatPaginator, { static: false }) private paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) private sort!: MatSort;
 
-  pageSizeOptions = [5, 10, 25, 100, 200];
-  currentPageSize?: number;
+  public pageSizeOptions = [5, 10, 25, 100, 200];
+  public currentPageSize?: number;
 
-  pagerResult!: PagerResult<T>;
-  isLoading = true;
-  items: T[] = [];
-  itemsSubject = new Subject<T[]>();
+  public pagerResult!: PagerResult<T>;
+  public isLoading = true;
+  public items: T[] = [];
+  public itemsSubject = new Subject<T[]>();
+  public userId?: string;
 
   private searchTerms?: string;
   private searchTermsSubject = new Subject<string>();
@@ -54,6 +55,7 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   ) {}
 
   ngOnInit(): void {
+    this.userId = this.activatedRoute.snapshot.params.userId;
     this.loadPageSize();
 
     this.activatedRoute.queryParamMap
