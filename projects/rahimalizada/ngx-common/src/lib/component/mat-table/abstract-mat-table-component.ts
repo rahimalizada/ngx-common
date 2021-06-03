@@ -15,10 +15,10 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   private static readonly DEFAULT_PAGE_SIZE = 10;
 
   @Input()
-  reloadTableObservable?: Observable<void>;
+  reloadTableSubject?: Subject<void>;
 
   @Input()
-  selectionClearObservable?: Observable<void>;
+  selectionClearSubject?: Subject<void>;
 
   @Output()
   itemCountChange = new EventEmitter<number>();
@@ -73,17 +73,17 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
         }
       });
 
-    if (this.reloadTableObservable) {
+    if (this.reloadTableSubject) {
       this.eventSubscriptions.add(
-        this.reloadTableObservable.subscribe(() => {
+        this.reloadTableSubject.subscribe(() => {
           this.reloadTable();
         }),
       );
     }
 
-    if (this.selectionClearObservable) {
+    if (this.selectionClearSubject) {
       this.eventSubscriptions.add(
-        this.selectionClearObservable.subscribe(() => {
+        this.selectionClearSubject.subscribe(() => {
           this.clearSelection();
         }),
       );
