@@ -5,7 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export function reloadPage(router: Router, activatedRoute: ActivatedRoute): void {
   const reuseStrategy = router.routeReuseStrategy.shouldReuseRoute;
   router.routeReuseStrategy.shouldReuseRoute = () => false;
-  router.navigated = false;
+  // router.navigated = false;
+  router.onSameUrlNavigation = 'reload';
   void router.navigate(['./'], { relativeTo: activatedRoute, queryParamsHandling: 'preserve' });
   router.routeReuseStrategy.shouldReuseRoute = reuseStrategy;
 }
