@@ -6,9 +6,9 @@ import { MatTable } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { merge, Observable, of, Subject, Subscription } from 'rxjs';
 import { catchError, debounceTime, delay, distinctUntilChanged, startWith, switchMap, tap } from 'rxjs/operators';
+import { PagerPathProvider } from '../../model/pager/pager-path-provider.model';
 import { AbstractRestService } from '../../rest/abstract-rest.service';
 import { PagerResult } from './../../model/pager/pager-result.model';
-import { PagerPathProvider } from '../../model/pager/pager-path-provider.model';
 
 @Directive()
 export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy, AfterViewInit {
