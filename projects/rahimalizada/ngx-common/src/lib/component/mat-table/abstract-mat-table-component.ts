@@ -1,4 +1,5 @@
-import { AfterViewInit, Directive, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { SelectionModel } from '@angular/cdk/collections';
+import { AfterViewInit, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
@@ -11,6 +12,18 @@ import { PagerResult } from './../../model/pager/pager-result.model';
 @Directive()
 export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy, AfterViewInit {
   private static readonly DEFAULT_PAGE_SIZE = 10;
+
+  @Input()
+  reloadTableObservable?: Observable<void>;
+
+  @Input()
+  selectionClearObservable?: Observable<void>;
+
+  @Output()
+  itemCountChange = new EventEmitter<number>();
+
+  @Output()
+  selectionChange = new EventEmitter<T[]>();
 
   @ViewChild(MatTable, { static: false }) private table!: MatTable<T>;
   @ViewChild(MatPaginator, { static: false }) private paginator!: MatPaginator;
@@ -31,6 +44,8 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   private requestFiltersSubject = new Subject<unknown>();
   private requestFilters: unknown;
   private subscription!: Subscription;
+  selection = new SelectionModel<T>(true, []);
+  private eventSubscriptions = new Subscription();
 
   constructor(protected service: AbstractRestService<T>, protected activatedRoute: ActivatedRoute, protected router: Router) {}
 
@@ -45,9 +60,14 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
     const result = this.userId
       ? this.service.pagerByPath(`user/${this.userId}`, page, pageSize, sort, sortDirection, searchTerms, requestFilters)
       : this.service.pager(page, pageSize, sort, sortDirection, searchTerms, requestFilters);
-    return result.pipe(
+    return this.processData(result);
+  }
+
+  protected processData(observable: Observable<PagerResult<T>>): Observable<PagerResult<T>> {
+    return observable.pipe(
       tap((val) => {
         this.itemsSubject.next(val.items);
+        this.itemCountChange.next(val.items.length);
       }),
     );
   }
@@ -70,6 +90,14 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
           }
         }
       });
+
+    if (this.reloadTableObservable) {
+      this.eventSubscriptions.add(this.reloadTableObservable.subscribe(() => this.reloadTable()));
+    }
+
+    if (this.selectionClearObservable) {
+      this.eventSubscriptions.add(this.selectionClearObservable.subscribe(() => this.selection.clear()));
+    }
   }
 
   ngAfterViewInit(): void {
@@ -78,6 +106,7 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+    this.eventSubscriptions.unsubscribe();
   }
 
   loadPageSize(): void {
@@ -133,7 +162,12 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
         distinctUntilChanged(),
         tap(() => this.paginator.firstPage()),
       ),
-      this.paginator.page.pipe(),
+      this.paginator.page.pipe(
+        tap(() => {
+          this.selection.clear();
+          this.selectionChange.emit(this.selection.selected);
+        }),
+      ),
     ).pipe(
       startWith(null),
       switchMap(() => {
@@ -203,5 +237,25 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
     this.items[index] = item;
 
     this.table.renderRows();
+  }
+
+  isAllSelected(): boolean {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.items.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle(): void {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.items.forEach((row) => this.selection.select(row));
+    }
+    this.selectionChange.emit(this.selection.selected);
+  }
+
+  changeSelection(row: T): void {
+    this.selection.toggle(row);
+    this.selectionChange.emit(this.selection.selected);
   }
 }
