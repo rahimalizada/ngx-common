@@ -38,8 +38,6 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   items: T[] = [];
   itemsSubject = new Subject<T[]>();
 
-  public userId?: string;
-
   private searchTerms?: string;
   private searchTermsSubject = new Subject<string>();
   private requestFiltersSubject = new Subject<unknown>();
@@ -56,7 +54,6 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   ) {}
 
   ngOnInit(): void {
-    this.userId = this.activatedRoute.snapshot.params.userId;
     this.loadPageSize();
 
     this.activatedRoute.queryParamMap
