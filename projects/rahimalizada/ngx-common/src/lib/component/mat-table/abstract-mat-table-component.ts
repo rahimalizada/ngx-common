@@ -51,7 +51,7 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
     protected service: AbstractRestService<T>,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    private pagerPathProvider: PagerPathProvider,
+    protected pagerPathProvider: PagerPathProvider,
   ) {}
 
   ngOnInit(): void {
