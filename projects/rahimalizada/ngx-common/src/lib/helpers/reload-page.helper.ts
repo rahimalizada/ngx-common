@@ -10,3 +10,10 @@ export function reloadPage(router: Router, activatedRoute: ActivatedRoute): void
   void router.navigate(['./'], { relativeTo: activatedRoute, queryParamsHandling: 'preserve' });
   // router.routeReuseStrategy.shouldReuseRoute = reuseStrategy;
 }
+
+export function reNavigate(router: Router): void {
+  const currentUrl = router.url;
+  router.navigateByUrl('/invalid', { skipLocationChange: true }).then(() => {
+    router.navigate([currentUrl]);
+  });
+}
