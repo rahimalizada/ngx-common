@@ -8,8 +8,7 @@ import { merge, Observable, of, Subject, Subscription } from 'rxjs';
 import { catchError, debounceTime, delay, distinctUntilChanged, startWith, switchMap, tap } from 'rxjs/operators';
 import { AbstractRestService } from '../../rest/abstract-rest.service';
 import { PagerResult } from './../../model/pager/pager-result.model';
-
-export type PagerPathProvider = () => string | undefined;
+import { PagerPathProvider } from '../../model/pager/pager-path-provider.model';
 
 @Directive()
 export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy, AfterViewInit {
@@ -94,7 +93,7 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   }
 
   private loadData(): Observable<PagerResult<T>> {
-    const pagerPath = this.pagerPathProvider();
+    const pagerPath = this.pagerPathProvider.getPagerPath();
     const observable = pagerPath
       ? this.service.pagerByPath(
           pagerPath,

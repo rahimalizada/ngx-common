@@ -38,6 +38,7 @@ export * from './lib/model/credentials/with-credentials.model';
 export * from './lib/model/credentials/with-permissions.model';
 export * from './lib/model/mongodb/object-id.model';
 export * from './lib/model/oplog/oplog.model';
+export * from './lib/model/pager/pager-path-provider.model';
 export * from './lib/model/pager/pager-request-filters-type.enum';
 export * from './lib/model/pager/pager-request.model';
 export * from './lib/model/pager/pager-result.model';
