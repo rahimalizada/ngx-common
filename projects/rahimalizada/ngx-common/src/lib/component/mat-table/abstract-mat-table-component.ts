@@ -74,11 +74,19 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
       });
 
     if (this.reloadTableObservable) {
-      this.eventSubscriptions.add(this.reloadTableObservable.subscribe(() => this.reloadTable()));
+      this.eventSubscriptions.add(
+        this.reloadTableObservable.subscribe(() => {
+          this.reloadTable();
+        }),
+      );
     }
 
     if (this.selectionClearObservable) {
-      this.eventSubscriptions.add(this.selectionClearObservable.subscribe(() => this.selection.clear()));
+      this.eventSubscriptions.add(
+        this.selectionClearObservable.subscribe(() => {
+          this.clearSelection();
+        }),
+      );
     }
   }
 
@@ -116,6 +124,7 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
       tap((val) => {
         this.itemsSubject.next(val.items);
         this.itemCountChange.next(val.items.length);
+        this.clearSelection();
       }),
     );
   }
@@ -173,19 +182,16 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
         distinctUntilChanged(),
         tap(() => this.paginator.firstPage()),
       ),
-      this.paginator.page.pipe(
-        tap(() => {
-          this.selection.clear();
-          this.selectionChange.emit(this.selection.selected);
-        }),
-      ),
+      this.paginator.page.pipe(),
     ).pipe(
       startWith(null),
       switchMap(() => {
         this.isLoading = true;
         return this.loadData();
       }),
-      tap(() => (this.isLoading = false)),
+      tap(() => {
+        this.isLoading = false;
+      }),
       catchError(() => {
         this.isLoading = false;
         return of({} as PagerResult<T>);
@@ -234,6 +240,11 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
     //     this.pagerResult = data;
     //     this.items = data.items;
     //   });
+  }
+
+  private clearSelection(): void {
+    this.selection.clear();
+    this.selectionChange.emit(this.selection.selected);
   }
 
   protected updateItem(index: number, item: T): void {
