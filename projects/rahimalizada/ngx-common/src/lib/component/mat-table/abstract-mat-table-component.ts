@@ -9,6 +9,8 @@ import { catchError, debounceTime, delay, distinctUntilChanged, startWith, switc
 import { AbstractRestService } from '../../rest/abstract-rest.service';
 import { PagerResult } from './../../model/pager/pager-result.model';
 
+export type PagerPathProvider = () => string | undefined;
+
 @Directive()
 export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy, AfterViewInit {
   private static readonly DEFAULT_PAGE_SIZE = 10;
@@ -51,7 +53,7 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
     protected service: AbstractRestService<T>,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    private pagerPathProvider: () => string | undefined,
+    private pagerPathProvider: PagerPathProvider,
   ) {}
 
   ngOnInit(): void {
