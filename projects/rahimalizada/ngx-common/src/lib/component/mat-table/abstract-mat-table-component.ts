@@ -26,6 +26,12 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   @Output()
   selectionChange = new EventEmitter<T[]>();
 
+  @Input()
+  withSelection = false;
+
+  @Input()
+  multiSelect = true;
+
   @ViewChild(MatTable, { static: false }) private table!: MatTable<T>;
   @ViewChild(MatPaginator, { static: false }) private paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) private sort!: MatSort;
@@ -44,7 +50,7 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   private requestFiltersSubject = new Subject<unknown>();
   private requestFilters: unknown;
   private subscription!: Subscription;
-  selection = new SelectionModel<T>(true, []);
+  public selection!: SelectionModel<T>;
   private eventSubscriptions = new Subscription();
 
   constructor(
@@ -56,6 +62,7 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
 
   ngOnInit(): void {
     this.userId = this.activatedRoute.snapshot.params.userId;
+    this.selection = new SelectionModel<T>(this.multiSelect, []);
     this.loadPageSize();
 
     this.activatedRoute.queryParamMap
