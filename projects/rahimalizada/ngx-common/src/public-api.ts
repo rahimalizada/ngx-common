@@ -10,7 +10,7 @@ export * from './lib/auth/with-permissions-check.model';
 export * from './lib/component/abstract-form-component';
 export * from './lib/component/mat-paginator/mat-paginator-intl-az';
 export * from './lib/component/mat-paginator/mat-paginator-intl-ru';
-export * from './lib/component/mat-table/abstract-list-filter-panel';
+export * from './lib/component/mat-table/abstract-mat-table-filter-panel';
 export * from './lib/component/mat-table/abstract-mat-table-component';
 export * from './lib/component/status-edit/status-edit.component';
 export * from './lib/component/status-list/status-list.component';

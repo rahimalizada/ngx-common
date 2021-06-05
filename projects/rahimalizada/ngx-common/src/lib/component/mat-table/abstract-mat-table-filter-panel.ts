@@ -6,7 +6,7 @@ import { delay, distinctUntilChanged } from 'rxjs/operators';
 import { PagerRequestFiltersType } from '../../model/pager/pager-request-filters-type.enum';
 
 @Directive()
-export class AbstractListFilterPanel implements OnInit, OnDestroy {
+export class AbstractMatTableFilterPanel implements OnInit, OnDestroy {
   @Input()
   fields: string[] = [];
 
