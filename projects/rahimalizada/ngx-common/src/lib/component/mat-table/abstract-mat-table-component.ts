@@ -32,6 +32,12 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   @Input()
   multiSelect = true;
 
+  @Input()
+  searchTermsSubject = new Subject<string>();
+
+  @Input()
+  requestFiltersSubject = new Subject<unknown>();
+
   @ViewChild(MatTable, { static: false }) private table!: MatTable<T>;
   @ViewChild(MatPaginator, { static: false }) private paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) private sort!: MatSort;
@@ -46,8 +52,6 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   public userId?: string;
 
   private searchTerms?: string;
-  public searchTermsSubject = new Subject<string>();
-  public requestFiltersSubject = new Subject<unknown>();
   private requestFilters: unknown;
   private subscription!: Subscription;
   public selection!: SelectionModel<T>;
