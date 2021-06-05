@@ -15,10 +15,16 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   private static readonly DEFAULT_PAGE_SIZE = 10;
 
   @Input()
-  reloadTableSubject?: Subject<void>;
+  searchTermsSubject = new BehaviorSubject<string | undefined>(undefined);
 
   @Input()
-  selectionClearSubject?: Subject<void>;
+  requestFiltersSubject = new BehaviorSubject<unknown>(undefined);
+
+  @Input()
+  reloadTableSubject = new Subject<void>();
+
+  @Input()
+  selectionClearSubject = new Subject<void>();
 
   @Output()
   itemCountChange = new EventEmitter<number>();
@@ -31,12 +37,6 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
 
   @Input()
   multiSelect = true;
-
-  @Input()
-  searchTermsSubject = new BehaviorSubject<string | undefined>(undefined);
-
-  @Input()
-  requestFiltersSubject = new BehaviorSubject<unknown>(undefined);
 
   @ViewChild(MatTable, { static: false }) private table!: MatTable<T>;
   @ViewChild(MatPaginator, { static: false }) private paginator!: MatPaginator;
@@ -51,8 +51,6 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   public itemsSubject = new Subject<T[]>();
   public userId?: string;
 
-  // private searchTerms?: string; // TODO remove
-  // private requestFilters: unknown; // TODO remove
   private subscription!: Subscription;
   public selection!: SelectionModel<T>;
   private eventSubscriptions = new Subscription();
@@ -84,21 +82,17 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
         }
       });
 
-    if (this.reloadTableSubject) {
-      this.eventSubscriptions.add(
-        this.reloadTableSubject.subscribe(() => {
-          this.reloadTable();
-        }),
-      );
-    }
+    this.eventSubscriptions.add(
+      this.reloadTableSubject.subscribe(() => {
+        this.reloadTable();
+      }),
+    );
 
-    if (this.selectionClearSubject) {
-      this.eventSubscriptions.add(
-        this.selectionClearSubject.subscribe(() => {
-          this.clearSelection();
-        }),
-      );
-    }
+    this.eventSubscriptions.add(
+      this.selectionClearSubject.subscribe(() => {
+        this.clearSelection();
+      }),
+    );
   }
 
   ngAfterViewInit(): void {
@@ -166,19 +160,8 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
     });
   }
 
-  onRequestFiltersChange(requestFilters?: unknown): void {
-    // TODO remove function
-    // this.requestFilters = requestFilters;
-    this.requestFiltersSubject.next(requestFilters);
-  }
-
-  onSearchTermsChange(searchTerms?: string): void {
-    // TODO remove function
-    // this.searchTerms = searchTerms;
-    this.searchTermsSubject.next(searchTerms);
-  }
-
   protected reloadTable(): void {
+    // TODO private, do through subject
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
