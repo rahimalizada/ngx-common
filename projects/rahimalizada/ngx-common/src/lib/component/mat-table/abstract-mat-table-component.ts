@@ -46,8 +46,8 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   public userId?: string;
 
   private searchTerms?: string;
-  private searchTermsSubject = new Subject<string>();
-  private requestFiltersSubject = new Subject<unknown>();
+  public searchTermsSubject = new Subject<string>();
+  public requestFiltersSubject = new Subject<unknown>();
   private requestFilters: unknown;
   private subscription!: Subscription;
   public selection!: SelectionModel<T>;
