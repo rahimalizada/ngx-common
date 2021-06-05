@@ -4,7 +4,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { merge, Observable, of, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, merge, Observable, of, Subject, Subscription } from 'rxjs';
 import { catchError, debounceTime, delay, distinctUntilChanged, startWith, switchMap, tap } from 'rxjs/operators';
 import { PagerPathProvider } from '../../model/pager/pager-path-provider.model';
 import { AbstractRestService } from '../../rest/abstract-rest.service';
@@ -33,10 +33,10 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   multiSelect = true;
 
   @Input()
-  searchTermsSubject = new Subject<string>();
+  searchTermsSubject = new BehaviorSubject<string | undefined>(undefined);
 
   @Input()
-  requestFiltersSubject = new Subject<unknown>();
+  requestFiltersSubject = new BehaviorSubject<unknown>(undefined);
 
   @ViewChild(MatTable, { static: false }) private table!: MatTable<T>;
   @ViewChild(MatPaginator, { static: false }) private paginator!: MatPaginator;
@@ -51,8 +51,8 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   public itemsSubject = new Subject<T[]>();
   public userId?: string;
 
-  private searchTerms?: string;
-  private requestFilters: unknown;
+  // private searchTerms?: string; // TODO remove
+  // private requestFilters: unknown; // TODO remove
   private subscription!: Subscription;
   public selection!: SelectionModel<T>;
   private eventSubscriptions = new Subscription();
@@ -119,16 +119,16 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
           this.paginator.pageSize,
           this.sort.active,
           this.sort.direction,
-          this.searchTerms,
-          this.requestFilters,
+          this.searchTermsSubject.getValue(),
+          this.requestFiltersSubject.getValue(),
         )
       : this.service.pager(
           this.paginator.pageIndex,
           this.paginator.pageSize,
           this.sort.active,
           this.sort.direction,
-          this.searchTerms,
-          this.requestFilters,
+          this.searchTermsSubject.getValue(),
+          this.requestFiltersSubject.getValue(),
         );
 
     return observable.pipe(
@@ -167,12 +167,14 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   }
 
   onRequestFiltersChange(requestFilters?: unknown): void {
-    this.requestFilters = requestFilters;
+    // TODO remove function
+    // this.requestFilters = requestFilters;
     this.requestFiltersSubject.next(requestFilters);
   }
 
   onSearchTermsChange(searchTerms?: string): void {
-    this.searchTerms = searchTerms;
+    // TODO remove function
+    // this.searchTerms = searchTerms;
     this.searchTermsSubject.next(searchTerms);
   }
 
