@@ -4,7 +4,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, merge, Observable, of, Subject, Subscription } from 'rxjs';
+import { merge, Observable, of, Subject, Subscription } from 'rxjs';
 import { catchError, debounceTime, delay, distinctUntilChanged, startWith, switchMap, tap } from 'rxjs/operators';
 import { PagerPathProvider } from '../../model/pager/pager-path-provider.model';
 import { AbstractRestService } from '../../rest/abstract-rest.service';
@@ -15,10 +15,10 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   private static readonly DEFAULT_PAGE_SIZE = 10;
 
   @Input()
-  searchTermsSubject = new BehaviorSubject<string | undefined>(undefined);
+  searchTermsSubject = new Subject<string | undefined>();
 
   @Input()
-  requestFiltersSubject = new BehaviorSubject<unknown>(undefined);
+  requestFiltersSubject = new Subject<unknown>();
 
   @Input()
   reloadTableSubject = new Subject<void>();
@@ -41,6 +41,9 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   @ViewChild(MatTable, { static: false }) private table!: MatTable<T>;
   @ViewChild(MatPaginator, { static: false }) private paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) private sort!: MatSort;
+
+  private searchTerms: string | undefined;
+  private requestFilters: unknown;
 
   public pageSizeOptions = [5, 10, 25, 100, 200];
   public currentPageSize?: number;
@@ -113,16 +116,16 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
           this.paginator.pageSize,
           this.sort.active,
           this.sort.direction,
-          this.searchTermsSubject.getValue(),
-          this.requestFiltersSubject.getValue(),
+          this.searchTerms,
+          this.requestFilters,
         )
       : this.service.pager(
           this.paginator.pageIndex,
           this.paginator.pageSize,
           this.sort.active,
           this.sort.direction,
-          this.searchTermsSubject.getValue(),
-          this.requestFiltersSubject.getValue(),
+          this.searchTerms,
+          this.requestFilters,
         );
 
     return observable.pipe(
@@ -171,11 +174,13 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
       this.searchTermsSubject.pipe(
         debounceTime(500),
         distinctUntilChanged(),
+        tap((value) => (this.searchTerms = value)),
         tap(() => this.paginator.firstPage()),
       ),
       this.requestFiltersSubject.pipe(
         debounceTime(500),
         distinctUntilChanged(),
+        tap((value) => (this.requestFilters = value)),
         tap(() => this.paginator.firstPage()),
       ),
       this.paginator.page.pipe(),

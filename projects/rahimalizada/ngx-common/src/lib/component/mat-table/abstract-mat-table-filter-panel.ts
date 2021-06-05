@@ -1,7 +1,7 @@
 import { Directive, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { delay, distinctUntilChanged } from 'rxjs/operators';
 import { PagerRequestFiltersType } from '../../model/pager/pager-request-filters-type.enum';
 
@@ -17,10 +17,10 @@ export class AbstractMatTableFilterPanel implements OnInit, OnDestroy {
   filtersEnabled = true;
 
   @Input()
-  searchTermsSubject = new BehaviorSubject<string | undefined>(undefined);
+  searchTermsSubject = new Subject<string | undefined>();
 
   @Input()
-  requestFiltersSubject = new BehaviorSubject<unknown>(undefined);
+  requestFiltersSubject = new Subject<unknown>();
 
   private subscriptions = new Subscription();
 
