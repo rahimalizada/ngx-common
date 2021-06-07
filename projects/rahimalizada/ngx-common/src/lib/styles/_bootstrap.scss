@@ -10,17 +10,22 @@
 // Row styling
 .row {
   &.error-row,
-  &.success-row {
+  &.error-col,
+  &.success-row &.success-col {
     margin-top: 0;
   }
 
   &.heading-row,
+  &.heading-col,
   &.search-row,
-  &.table-row {
+  &.search-col,
+  &.table-row,
+  &.table-col {
     margin-bottom: 1rem;
   }
 
-  &.button-row {
+  &.button-row,
+  &.button-col {
     margin-top: 1rem;
   }
 }
