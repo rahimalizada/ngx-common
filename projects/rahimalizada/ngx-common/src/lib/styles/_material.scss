@@ -13,7 +13,7 @@ button:focus {
 .mat-fab,
 .mat-mini-fab {
   // Additinal material button colors
-  &.mat-succes {
+  &.mat-success {
     background-color: #408140;
     color: #fff;
   }
@@ -59,7 +59,7 @@ button:focus {
 // Material snack bar
 .info.mat-snack-bar-container {
   color: white;
-  background-color: $color-primary;
+  background-color: #003580;
 
   .mat-simple-snackbar-action {
     color: white;
