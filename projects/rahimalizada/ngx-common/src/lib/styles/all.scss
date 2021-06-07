@@ -1,10 +1,6 @@
 @import 'mixins';
 @import 'default-variables';
-@import 'reset';
+@import 'base';
 @import 'helpers';
 @import 'bootstrap';
 @import 'material';
-
-@include color-styles('primary', $color-primary);
-
-@include color-styles('secondary', $color-primary);

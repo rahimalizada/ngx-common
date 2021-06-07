@@ -1,29 +1,29 @@
 @mixin color-styles($name, $color) {
   .color-#{$name} {
-    color: #{$name};
+    color: $color;
   }
 
   .background-color-#{$name} {
-    background-color: #{$name};
+    background-color: $color;
   }
 
   .border-color-#{$name} {
-    border-color: #{$name};
+    border-color: $color;
   }
   .border-top-color-#{$name} {
-    border-top-color: #{$name};
+    border-top-color: $color;
   }
   .border-right-color-#{$name} {
-    border-right-color: #{$name};
+    border-right-color: $color;
   }
   .border-bottom-color-#{$name} {
-    border-bottom-color: #{$name};
+    border-bottom-color: $color;
   }
   .border-left-color-#{$name} {
-    border-left-color: #{$name};
+    border-left-color: $color;
   }
 
   .hover-color-#{$name}:hover {
-    color: #{$name};
+    color: $color;
   }
 }
