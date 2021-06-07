@@ -1,3 +1,92 @@
-@import 'material/mat-button';
-@import 'material/mat-toolbar-spacer';
-@import 'material/all';
+.mat-toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+// Bootstrap reboot breaks material buttons
+button:focus {
+  outline: none;
+}
+
+// Material buttons
+.mat-flat-button,
+.mat-raised-button,
+.mat-fab,
+.mat-mini-fab {
+  // Additinal material button colors
+  &.mat-succes {
+    background-color: #408140;
+    color: #fff;
+  }
+
+  // Full width button
+  &.full-width {
+    font-size: 18px;
+    width: 100% !important;
+    font-weight: normal;
+    padding: 4px !important;
+  }
+}
+
+// Material disable background color in mat drawer
+.mat-drawer-container {
+  background-color: transparent;
+}
+
+// Material form hints and errors bug when multi-line
+// https://github.com/angular/components/issues/5227
+.mat-form-field {
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+
+    .mat-form-field-underline {
+      position: initial !important;
+      display: block;
+      margin-top: -1px;
+    }
+
+    .mat-form-field-subscript-wrapper,
+    .mat-form-field-ripple {
+      position: initial !important;
+      display: table;
+    }
+
+    .mat-form-field-subscript-wrapper {
+      min-height: calc(1em + 1px);
+    }
+  }
+}
+
+// Material snack bar
+.info.mat-snack-bar-container {
+  color: white;
+  background-color: $color-primary;
+
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
+
+// Material table
+table td.mat-cell,
+table td.mat-footer-cell,
+table th.mat-header-cell {
+  padding-right: 8px;
+  padding-left: 8px;
+}
+
+table th.mat-column-select,
+table th.mat-header-cell:first-of-type.mat-column-select,
+table td.mat-column-select,
+table td.mat-cell:first-of-type.mat-column-select {
+  padding-left: 14px;
+  padding-right: 0;
+}
+
+// Accordion
+.mat-expansion-panel-header-title {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+mat-expansion-panel.mat-expanded .mat-expansion-panel-header-title {
+  color: rgba(0, 0, 0, 0.87);
+}

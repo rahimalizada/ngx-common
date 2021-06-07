@@ -11,3 +11,20 @@ body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
+
+// Header brand
+header .brand-name a,
+header .logo a {
+  color: white;
+}
+
+header .brand-name a:hover,
+header .logo a:hover {
+  text-decoration: none;
+}
+
+// Required form field
+.form-group.required .control-label:after {
+  content: ' *';
+  color: red;
+}
