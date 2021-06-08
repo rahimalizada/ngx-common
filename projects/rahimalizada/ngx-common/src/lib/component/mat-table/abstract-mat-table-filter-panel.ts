@@ -1,11 +1,11 @@
-import { Directive, Input, OnDestroy, OnInit } from '@angular/core';
+import { Directive, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, Subject, Subscription } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { delay, distinctUntilChanged } from 'rxjs/operators';
 
 @Directive()
-export class AbstractMatTableFilterPanel implements OnInit, OnDestroy {
+export class AbstractMatTableFilterPanel implements OnInit {
   @Input()
   fields: string[] = [];
 
@@ -16,22 +16,13 @@ export class AbstractMatTableFilterPanel implements OnInit, OnDestroy {
   filtersEnabled = true;
 
   @Input()
-  searchTermsSubject = new Subject<string | undefined>();
-
-  @Input()
-  requestFiltersSubject = new Subject<unknown>();
-
-  private subscriptions = new Subscription();
+  pagerParamsSubject = new Subject<{ search: string; filters: unknown }>();
 
   expanded = false;
   filterForm!: FormGroup;
   searchForm!: FormGroup;
 
   constructor(protected fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute) {}
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
 
   ngOnInit(): void {
     if (!this.filterForm) {
@@ -44,8 +35,8 @@ export class AbstractMatTableFilterPanel implements OnInit, OnDestroy {
       this.searchForm = this.fb.group({ search: null });
     }
 
-    this.onFilterFormChange();
-    this.onSearchFormChange();
+    this.subscribeToFilterFormChange();
+    this.subscribeToSearchFormChange();
 
     of('')
       .pipe(delay(0))
@@ -61,38 +52,31 @@ export class AbstractMatTableFilterPanel implements OnInit, OnDestroy {
     return false;
   }
 
-  private onSearchFormChange(): void {
-    // Save search terms
-    const subscription = this.searchTermsSubject
-      .pipe(
-        delay(0), // Required, bug
-      )
-      .subscribe(() => this.saveState());
-    this.subscriptions.add(subscription);
-
-    this.searchForm.valueChanges.subscribe((value) => {
-      if (value.search && value.search.trim().length > 0) {
-        this.searchTermsSubject.next(value.search);
-      } else {
-        this.searchTermsSubject.next(undefined);
-      }
-    });
+  private subscribeToSearchFormChange(): void {
+    this.searchForm.valueChanges //
+      .pipe(distinctUntilChanged()) // Material select with null value bug fix
+      .subscribe(() => this.onFormsChange());
   }
 
-  private onFilterFormChange(): void {
+  private subscribeToFilterFormChange(): void {
     this.filterForm.valueChanges //
       .pipe(distinctUntilChanged()) // Material select with null value bug fix
-      .subscribe((value) => {
-        // Remove null properties from this object
-        Object.keys(value).forEach((key) => !value[key] && delete value[key]);
-        const isEmpty = Object.entries(value).length === 0;
-        this.saveState();
-        if (isEmpty) {
-          this.requestFiltersSubject.next(undefined);
-        } else {
-          this.requestFiltersSubject.next(value);
-        }
-      });
+      .subscribe(() => this.onFormsChange());
+  }
+
+  private onFormsChange(): void {
+    this.saveState();
+
+    const searchState = this.searchForm.getRawValue().search;
+    const filterState = this.filterForm.getRawValue();
+    // Remove null properties from this object
+    Object.keys(filterState).forEach((key) => !filterState[key] && delete filterState[key]);
+
+    const data = {
+      search: searchState && searchState.trim().length > 0 ? searchState : undefined,
+      filters: Object.entries(filterState).length > 0 ? filterState : undefined,
+    };
+    this.pagerParamsSubject.next(data);
   }
 
   private loadState(): void {
