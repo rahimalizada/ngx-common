@@ -16,7 +16,7 @@ export class AbstractMatTableFilterPanel implements OnInit {
   filtersEnabled = true;
 
   @Input()
-  pagerParamsSubject = new Subject<{ search: string; filters: unknown }>();
+  pagerParamsSubject = new Subject<{ search?: string; filters?: unknown }>();
 
   expanded = false;
   filterForm!: FormGroup;
