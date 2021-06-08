@@ -1,9 +1,8 @@
 import { Directive, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, Subscription } from 'rxjs';
+import { of, Subject, Subscription } from 'rxjs';
 import { delay, distinctUntilChanged } from 'rxjs/operators';
-import { PagerRequestFiltersType } from '../../model/pager/pager-request-filters-type.enum';
 
 @Directive()
 export class AbstractMatTableFilterPanel implements OnInit, OnDestroy {
@@ -37,7 +36,7 @@ export class AbstractMatTableFilterPanel implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (!this.filterForm) {
       this.filterForm = this.fb.group({
-        type: PagerRequestFiltersType.AND,
+        type: null,
       });
     }
 
@@ -45,18 +44,12 @@ export class AbstractMatTableFilterPanel implements OnInit, OnDestroy {
       this.searchForm = this.fb.group({ search: null });
     }
 
-    this.activatedRoute.queryParamMap.subscribe((val) => {
-      const searchParam = val.get('search');
-      if (searchParam == null && this.searchForm.value.search != null) {
-        this.searchForm.patchValue({ search: null });
-      }
-    });
-
     this.onFilterFormChange();
-    this.loadFiltersState();
-
     this.onSearchFormChange();
-    this.loadSearchState();
+
+    of('')
+      .pipe(delay(0))
+      .subscribe(() => this.loadState());
   }
 
   public showField(...names: string[]): boolean {
@@ -74,30 +67,16 @@ export class AbstractMatTableFilterPanel implements OnInit, OnDestroy {
       .pipe(
         delay(0), // Required, bug
       )
-      .subscribe((search?) => {
-        this.router.navigate([], {
-          relativeTo: this.activatedRoute,
-          queryParams: { search },
-          queryParamsHandling: 'merge',
-        });
-      });
+      .subscribe(() => this.saveState());
     this.subscriptions.add(subscription);
 
     this.searchForm.valueChanges.subscribe((value) => {
-      if (value.search && value.search.trim().length === 0) {
-        this.searchTermsSubject.next(undefined);
-      } else {
+      if (value.search && value.search.trim().length > 0) {
         this.searchTermsSubject.next(value.search);
+      } else {
+        this.searchTermsSubject.next(undefined);
       }
     });
-  }
-
-  private loadSearchState(): void {
-    const search = this.activatedRoute.snapshot.queryParamMap.get('search');
-    const currentValue = this.searchForm.value.search;
-    if (currentValue !== search) {
-      this.searchForm.patchValue({ search });
-    }
   }
 
   private onFilterFormChange(): void {
@@ -105,31 +84,51 @@ export class AbstractMatTableFilterPanel implements OnInit, OnDestroy {
       .pipe(distinctUntilChanged()) // Material select with null value bug fix
       .subscribe((value) => {
         // Remove null properties from this object
-        Object.keys(value).forEach((key) => value[key] == null && delete value[key]);
+        Object.keys(value).forEach((key) => !value[key] && delete value[key]);
         const isEmpty = Object.entries(value).length === 0;
+        this.saveState();
         if (isEmpty) {
-          this.resetFiltersState();
           this.requestFiltersSubject.next(undefined);
         } else {
-          this.saveFiltersState();
           this.requestFiltersSubject.next(value);
         }
       });
   }
 
-  private loadFiltersState(): void {
-    const value = JSON.parse(localStorage.getItem('pager-request-filters') as string);
-    if (value !== null) {
+  private loadState(): void {
+    const searchState = this.activatedRoute.snapshot.queryParamMap.get('search');
+    if (searchState) {
+      this.searchForm.patchValue({ search: searchState });
+    }
+
+    const filterParam = this.activatedRoute.snapshot.queryParamMap.get('filters');
+    if (!filterParam) {
+      return;
+    }
+    const filterState = JSON.parse(filterParam);
+    if (filterState) {
       this.expanded = true;
-      this.filterForm.patchValue(value);
+      this.filterForm.patchValue(filterState);
     }
   }
 
-  private saveFiltersState(): void {
-    localStorage.setItem('pager-request-filters', JSON.stringify(this.filterForm.value));
+  private saveState(): Promise<boolean> {
+    const searchState = this.searchForm.getRawValue().search;
+    const filterState = this.filterForm.getRawValue();
+    Object.keys(filterState).forEach((key) => !filterState[key] && delete filterState[key]);
+
+    return this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: { search: searchState, filters: JSON.stringify(filterState) },
+      queryParamsHandling: 'merge',
+    });
   }
 
-  private resetFiltersState(): void {
-    localStorage.removeItem('pager-request-filters');
+  private resetState(): Promise<boolean> {
+    return this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: { search: null, filters: null },
+      queryParamsHandling: 'merge',
+    });
   }
 }
