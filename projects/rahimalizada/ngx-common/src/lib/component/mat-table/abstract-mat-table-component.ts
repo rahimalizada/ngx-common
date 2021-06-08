@@ -15,7 +15,7 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   private static readonly DEFAULT_PAGE_SIZE = 10;
 
   @Input()
-  pagerParamsSubject = new Subject<{ search: string; filters: unknown }>();
+  pagerParamsSubject = new Subject<{ search?: string; filters?: unknown }>();
 
   @Input()
   reloadTableSubject = new Subject<void>();
