@@ -10,30 +10,25 @@
 // Row styling
 .row {
   &.error-row,
-  &.error-col,
-  &.success-row &.success-col {
+  &.success-row {
     margin-top: 0;
   }
 
   &.heading-row,
-  &.heading-col,
   &.search-row,
-  &.search-col,
-  &.table-row,
-  &.table-col {
+  &.table-row {
     margin-bottom: 1rem;
   }
 
-  &.button-row,
-  &.button-col {
+  &.button-row {
     margin-top: 1rem;
   }
 }
 
-// Form row
-form .row {
-  margin-top: 1.5rem;
-}
+// // Form row
+// form .row {
+//   margin-top: 1.5rem;
+// }
 
 // Two column description list
 dl.two-column {
