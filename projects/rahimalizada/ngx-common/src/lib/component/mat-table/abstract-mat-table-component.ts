@@ -15,10 +15,7 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   private static readonly DEFAULT_PAGE_SIZE = 10;
 
   @Input()
-  searchTermsSubject = new Subject<string | undefined>();
-
-  @Input()
-  requestFiltersSubject = new Subject<unknown>();
+  pagerParamsSubject = new Subject<{ search: string; filters: unknown }>();
 
   @Input()
   reloadTableSubject = new Subject<void>();
@@ -42,8 +39,8 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
   @ViewChild(MatPaginator, { static: false }) private paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) private sort!: MatSort;
 
-  private searchTerms: string | undefined;
-  private requestFilters: unknown;
+  private search: string | undefined;
+  private filters: unknown;
 
   public pageSizeOptions = [5, 10, 25, 100, 200];
   public currentPageSize?: number;
@@ -116,16 +113,16 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
           this.paginator.pageSize,
           this.sort.active,
           this.sort.direction,
-          this.searchTerms,
-          this.requestFilters,
+          this.search,
+          this.filters,
         )
       : this.service.pager(
           this.paginator.pageIndex,
           this.paginator.pageSize,
           this.sort.active,
           this.sort.direction,
-          this.searchTerms,
-          this.requestFilters,
+          this.search,
+          this.filters,
         );
 
     return observable.pipe(
@@ -171,16 +168,13 @@ export abstract class AbstractMatTableDirective<T> implements OnInit, OnDestroy,
 
     const observable: Observable<PagerResult<T>> = merge(
       this.sort?.sortChange.pipe(tap(() => this.paginator.firstPage())),
-      this.searchTermsSubject.pipe(
+      this.pagerParamsSubject.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        tap((value) => (this.searchTerms = value)),
-        tap(() => this.paginator.firstPage()),
-      ),
-      this.requestFiltersSubject.pipe(
-        debounceTime(500),
-        distinctUntilChanged(),
-        tap((value) => (this.requestFilters = value)),
+        tap((requestParams) => {
+          this.search = requestParams.search;
+          this.filters = requestParams.filters;
+        }),
         tap(() => this.paginator.firstPage()),
       ),
       this.paginator.page.pipe(),
