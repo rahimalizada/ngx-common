@@ -1,3 +1,4 @@
+import { ViewportScroller } from '@angular/common';
 import { Directive, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,7 +23,12 @@ export class AbstractMatTableFilterPanel implements OnInit {
   filterForm!: FormGroup;
   searchForm!: FormGroup;
 
-  constructor(protected fb: FormBuilder, private router: Router, private activatedRoute: ActivatedRoute) {}
+  constructor(
+    protected fb: FormBuilder,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private viewportScroller: ViewportScroller,
+  ) {}
 
   ngOnInit(): void {
     if (!this.filterForm) {
@@ -96,23 +102,29 @@ export class AbstractMatTableFilterPanel implements OnInit {
     }
   }
 
-  private saveState(): Promise<boolean> {
+  private saveState(): void {
     const searchState = this.searchForm.getRawValue().search;
     const filterState = this.filterForm.getRawValue();
     Object.keys(filterState).forEach((key) => !filterState[key] && delete filterState[key]);
 
-    return this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams: { search: searchState, filters: JSON.stringify(filterState) },
-      queryParamsHandling: 'merge',
-    });
+    const scrollPosition = this.viewportScroller.getScrollPosition();
+    this.router
+      .navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: { search: searchState, filters: JSON.stringify(filterState) },
+        queryParamsHandling: 'merge',
+      })
+      .then(() => this.viewportScroller.scrollToPosition(scrollPosition));
   }
 
-  private resetState(): Promise<boolean> {
-    return this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      queryParams: { search: null, filters: null },
-      queryParamsHandling: 'merge',
-    });
+  private resetState(): void {
+    const scrollPosition = this.viewportScroller.getScrollPosition();
+    this.router
+      .navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: { search: null, filters: null },
+        queryParamsHandling: 'merge',
+      })
+      .then(() => this.viewportScroller.scrollToPosition(scrollPosition));
   }
 }
