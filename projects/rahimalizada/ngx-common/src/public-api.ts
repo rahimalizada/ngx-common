@@ -6,7 +6,6 @@ export * from './lib/auth/abstract-auth.guard';
 export * from './lib/auth/abstract-auth.service';
 export * from './lib/auth/abstract-jwt.interceptor';
 export * from './lib/auth/abstract-redirect.guard';
-export * from './lib/auth/with-permissions-check.model';
 export * from './lib/component/abstract-form-component';
 export * from './lib/component/mat-paginator/mat-paginator-intl-az';
 export * from './lib/component/mat-paginator/mat-paginator-intl-ru';
