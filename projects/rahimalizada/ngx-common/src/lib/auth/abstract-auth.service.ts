@@ -101,11 +101,15 @@ export abstract class AbstractAuthService<T extends { token: string; refreshToke
   }
 
   hasAllPermissions(...permissions: string[]): boolean {
-    return permissions.map((permission) => this.shiroTrie.check(permission)).filter((check) => check === false).length === 0;
+    return (
+      this.isLoggedIn() && permissions.map((permission) => this.shiroTrie.check(permission)).filter((check) => check === false).length === 0
+    );
   }
 
   hasAnyPermissions(...permissions: string[]): boolean {
-    return permissions.map((permission) => this.shiroTrie.check(permission)).filter((check) => check === true).length > 0;
+    return (
+      this.isLoggedIn() && permissions.map((permission) => this.shiroTrie.check(permission)).filter((check) => check === true).length > 0
+    );
   }
 
   private isValid(authResult: T | null): boolean {
